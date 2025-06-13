@@ -1,5 +1,6 @@
 ﻿namespace AppForMovies.API.Models
 {
+    [Index(nameof(Title), IsUnique = true)]
     public class Movie
     {
         public Movie()
