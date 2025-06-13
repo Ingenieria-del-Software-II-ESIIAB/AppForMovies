@@ -6,4 +6,5 @@ namespace AppForMovies.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
+    public DbSet<Genre> Genres { get; set; }
 }
