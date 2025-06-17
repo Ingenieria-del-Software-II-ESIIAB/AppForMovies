@@ -11,8 +11,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         base.OnModelCreating(builder);
 
+        builder.Entity<RentalItem>().HasKey(pi => new { pi.MovieId, pi.RentalId });
     }
 
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
+    public DbSet<Rental> Rentals { get; set; }
 }
