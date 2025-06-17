@@ -17,4 +17,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Rental> Rentals { get; set; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 }
