@@ -7,13 +7,11 @@
         {
         }
 
-        public Movie(string title, Genre genre, DateTime releaseDate, decimal priceForPurchase, int quantityForPurchase, double priceForRenting, int quantityForRenting)
+        public Movie(string title, Genre genre, DateTime releaseDate, double priceForRenting, int quantityForRenting)
         {
             Title = title;
             Genre = genre;
             ReleaseDate = releaseDate;
-            PriceForPurchase = priceForPurchase;
-            QuantityForPurchase = quantityForPurchase;
             PriceForRenting = priceForRenting;
             QuantityForRenting = quantityForRenting;
         }
@@ -31,18 +29,6 @@
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
-
-
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Range(0.5, float.MaxValue, ErrorMessage = "Minimum price is 0.5 ")]
-        [Display(Name = "Price For Purchase")]
-        [Precision(10, 2)]
-        public decimal PriceForPurchase { get; set; }
-
-
-        [Display(Name = "Quantity For Purchase")]
-        [Range(0, int.MaxValue, ErrorMessage = "Minimum quantity for Purchase is 1")]
-        public int QuantityForPurchase { get; set; }
 
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
