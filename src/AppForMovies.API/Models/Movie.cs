@@ -7,9 +7,11 @@
         {
         }
 
-        public Movie(string title, Genre genre, DateTime releaseDate, double priceForRenting, int quantityForRenting)
+        public Movie(string title, Genre genre, decimal priceForPurchase, int quantityForPurchase, DateTime releaseDate, double priceForRenting, int quantityForRenting)
         {
             Title = title;
+            PriceForPurchase = priceForPurchase;
+            QuantityForPurchase = quantityForPurchase;
             Genre = genre;
             ReleaseDate = releaseDate;
             PriceForRenting = priceForRenting;
@@ -22,6 +24,16 @@
         [StringLength(50, ErrorMessage = "Title name cannot be longer than 50 characters.")]
         public string Title { get; set; }
 
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Range(0.5, float.MaxValue, ErrorMessage = "Minimum price is 0.5 ")]
+        [Display(Name = "Price For Purchase")]
+        [Precision(10, 2)]
+        public decimal PriceForPurchase { get; set; }
+
+
+        [Display(Name = "Quantity For Purchase")]
+        [Range(0, int.MaxValue, ErrorMessage = "Minimum quantity for Purchase is 1")]
+        public int QuantityForPurchase { get; set; }
 
         public Genre Genre { get; set; }
 
