@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "req", "req", "{6BBF0CA0-FC1
 		req\Use Case - Rental Movies.docx = req\Use Case - Rental Movies.docx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppForMovies.Shared", "src\AppForMovies.Shared\AppForMovies.Shared.csproj", "{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{EBB09687-2AD0-43EB-A0E1-E61C1FF73487}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBB09687-2AD0-43EB-A0E1-E61C1FF73487}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBB09687-2AD0-43EB-A0E1-E61C1FF73487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{6EBB09B9-1F12-4225-B9B0-F2DCDD1B3E44} = {E795EBF0-BBF3-4005-BAC8-41654EF7B85F}
 		{8BB66CF8-0124-4FC3-882F-401F4562DEB1} = {D1FFEAFD-D5EE-43A7-8DC1-2DA161187974}
 		{EBB09687-2AD0-43EB-A0E1-E61C1FF73487} = {D1FFEAFD-D5EE-43A7-8DC1-2DA161187974}
+		{764B4FB4-ECB8-4A28-8B51-6CDFB76039CE} = {E795EBF0-BBF3-4005-BAC8-41654EF7B85F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {48ADBE7C-7BF0-4608-B064-1464DF23417D}
