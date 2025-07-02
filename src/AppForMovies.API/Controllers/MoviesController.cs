@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppForMovies.Shared.MovieDTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppForMovies.API.Controllers
@@ -16,28 +17,28 @@ namespace AppForMovies.API.Controllers
             _logger = logger;
         }
 
-        //[HttpGet]
-        //[Route("[action]")]
-        //[ProducesResponseType(typeof(decimal), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        //public async Task<ActionResult> ComputeDivision(decimal op1, decimal op2) 
-        //{ 
-        //    if (op2 == 0) 
-        //    { 
-        //        _logger.LogError($"{DateTime.Now} Exception: op2=0, division by 0"); 
-        //        return BadRequest("op2 must be different from 0"); 
-        //    } 
-        //    decimal result = decimal.Round(op1 / op2, 2); 
-        //    return Ok(result); 
-        //}
 
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(IList<Movie>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetMoviesForRenting()
+        [ProducesResponseType(typeof(IList<MovieForRentalDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetMoviesForRental(string? title, string? genre, DateTime from, DateTime to)
         {
-            IList<Movie> movies = await _context.Movies.ToListAsync();
+            var movies = await _context.Movies
+                .Include(m=>m.Genre)
+                .Include(m=>m.RentalItems)
+                    .ThenInclude(ri=>ri.Rent)
+                .Where(m=>((m.Title.Contains(title)) || (title==null))
+                    && ((m.Genre.Name.Equals(genre)) || (genre==null)) 
+                    && (m.RentalItems.Count(ri=>ri.Rent.RentalDateFrom<=to
+                        && ri.Rent.RentalDateTo>=from) < m.QuantityForRenting))
+                .OrderBy(m=>m.Title)
+                    .ThenBy(m=>m.PriceForRenting)
+                .Select(m=>new MovieForRentalDTO(m.Id, m.Title, m.Genre.Name,
+                            m.ReleaseDate, m.PriceForPurchase,
+                            m.RentalItems.Max(ri=>ri.Rent.RentalDate)))
+                .ToListAsync();
             return Ok(movies);
         }
+
     }
 }
