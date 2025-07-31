@@ -7,14 +7,14 @@
         {
         }
 
-        public Movie(string title, Genre genre, decimal priceForPurchase, int quantityForPurchase, DateTime releaseDate, double priceForRenting, int quantityForRenting)
+        public Movie(string title, Genre genre, DateTime releaseDate, decimal priceForPurchase, int quantityForPurchase, double priceForRenting, int quantityForRenting)
         {
             Title = title;
-            PriceForPurchase = priceForPurchase;
-            QuantityForPurchase = quantityForPurchase;
-            Genre = genre;
-            ReleaseDate = releaseDate;
             PriceForRenting = priceForRenting;
+            PriceForPurchase = priceForPurchase;
+            ReleaseDate = releaseDate;
+            Genre = genre;
+            QuantityForPurchase = quantityForPurchase;
             QuantityForRenting = quantityForRenting;
         }
 

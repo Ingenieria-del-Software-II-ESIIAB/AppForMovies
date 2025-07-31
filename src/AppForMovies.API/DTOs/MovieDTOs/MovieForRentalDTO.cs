@@ -9,13 +9,21 @@ namespace AppForMovies.Shared.MovieDTOs
 {
     public class MovieForRentalDTO
     {
-        public MovieForRentalDTO(int id, string title, string genre, DateTime releaseDate, decimal priceForRenting, DateTime? lastRental)
+        public MovieForRentalDTO()
+        {
+        }
+
+        public MovieForRentalDTO(int id, string title, string genre, DateTime releaseDate, double priceForRenting)
         {
             Id = id;
             Title = title;
             Genre = genre;
             ReleaseDate = releaseDate;
             PriceForRenting = priceForRenting;
+        }
+
+        public MovieForRentalDTO(int id, string title, string genre, DateTime releaseDate, double priceForRenting, DateTime? lastRental) : this(id, title, genre, releaseDate, priceForRenting)
+        {
             LastRental = lastRental;
         }
 
@@ -27,8 +35,20 @@ namespace AppForMovies.Shared.MovieDTOs
         [StringLength(50, ErrorMessage = "Genre must have a maximun length of 50 characters", MinimumLength = 4)]
         public string Genre { get; set; }
 
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
-        public decimal PriceForRenting { get; set; }
+
+
+        [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Range(1, float.MaxValue, ErrorMessage = "Minimum price is 1 ")]
+        [Display(Name = "Price For Renting")]
+        public double PriceForRenting
+        {
+            get; set;
+        }
         public DateTime? LastRental {  get; set; }
 
         public override bool Equals(object? obj)
