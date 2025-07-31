@@ -7,7 +7,7 @@
         {
         }
 
-        public PurchaseItem(Movie movie, Purchase purchase, int quantity)
+        public PurchaseItem(Movie movie, int quantity, Purchase purchase)
         {
             Movie = movie;
             MovieId = movie.Id;
