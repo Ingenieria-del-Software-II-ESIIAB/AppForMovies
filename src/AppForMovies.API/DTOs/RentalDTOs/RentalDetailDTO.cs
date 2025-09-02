@@ -25,33 +25,14 @@ namespace AppForMovies.API.DTOs.RentalDTOs
         {
             return obj is RentalDetailDTO dTO &&
                    base.Equals(obj) &&
-                   RentalDateFrom == dTO.RentalDateFrom &&
-                   RentalDateTo == dTO.RentalDateTo &&
-                   DeliveryAddress == dTO.DeliveryAddress &&
-                   CustomerUserName == dTO.CustomerUserName &&
-                   CustomerNameSurname == dTO.CustomerNameSurname &&
-                   EqualityComparer<IList<RentalItemDTO>>.Default.Equals(RentalItems, dTO.RentalItems) &&
-                   PaymentMethod == dTO.PaymentMethod &&
                    TotalPrice == dTO.TotalPrice &&
                    Id == dTO.Id &&
-                   RentalDate == dTO.RentalDate;
+                   CompareDate(RentalDate, dTO.RentalDate);
         }
 
         public override int GetHashCode()
         {
-            HashCode hash = new HashCode();
-            hash.Add(base.GetHashCode());
-            hash.Add(RentalDateFrom);
-            hash.Add(RentalDateTo);
-            hash.Add(DeliveryAddress);
-            hash.Add(CustomerUserName);
-            hash.Add(CustomerNameSurname);
-            hash.Add(RentalItems);
-            hash.Add(PaymentMethod);
-            hash.Add(TotalPrice);
-            hash.Add(Id);
-            hash.Add(RentalDate);
-            return hash.ToHashCode();
+            return HashCode.Combine(base.GetHashCode(), Id, RentalDate);
         }
     }
 }

@@ -67,30 +67,14 @@
         public override bool Equals(object? obj)
         {
             return obj is RentalForCreateDTO dTO &&
-                   RentalDateFrom == dTO.RentalDateFrom &&
-                   RentalDateTo == dTO.RentalDateTo &&
+                   CompareDate(RentalDateFrom, dTO.RentalDateFrom) &&
+                   CompareDate(RentalDateTo, dTO.RentalDateTo) &&
                    DeliveryAddress == dTO.DeliveryAddress &&
                    CustomerUserName == dTO.CustomerUserName &&
                    CustomerNameSurname == dTO.CustomerNameSurname &&
-                   EqualityComparer<IList<RentalItemDTO>>.Default.Equals(RentalItems, dTO.RentalItems) &&
+                   RentalItems.SequenceEqual(dTO.RentalItems) &&
                    PaymentMethod == dTO.PaymentMethod &&
-                   NumberOfDays == dTO.NumberOfDays &&
                    TotalPrice == dTO.TotalPrice;
-        }
-
-        public override int GetHashCode()
-        {
-            HashCode hash = new HashCode();
-            hash.Add(RentalDateFrom);
-            hash.Add(RentalDateTo);
-            hash.Add(DeliveryAddress);
-            hash.Add(CustomerUserName);
-            hash.Add(CustomerNameSurname);
-            hash.Add(RentalItems);
-            hash.Add(PaymentMethod);
-            hash.Add(NumberOfDays);
-            hash.Add(TotalPrice);
-            return hash.ToHashCode();
         }
     }
 }
