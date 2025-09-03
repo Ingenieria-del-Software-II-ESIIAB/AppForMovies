@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AppForMovies.API.Controllers;
+using AppForMovies.API.DTOs.RentalDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,5 +35,70 @@ namespace AppForMovies.UT.RentalsController_test {
             _context.Add(rental);
             _context.SaveChanges();
         }
+
+        public static IEnumerable<object[]> TestCasesFor_CreatePurchase() {
+            var rentalNoITem = new RentalForCreateDTO("elena@uclm.es", "Elena Navarro",
+                "Avda. España s/n, Albacete", PaymentMethodTypes.CreditCard,
+                DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentalItemDTO>());
+
+            var rentalItems = new List<RentalItemDTO>() { new RentalItemDTO(2, "The man in the high castle", "Drama", 4.0, "My favourite movie") };
+
+            var rentalFromBeforeToday = new RentalForCreateDTO("elena@uclm.es", "Elena Navarro",
+                "Avda. España s/n, Albacete", PaymentMethodTypes.CreditCard,
+                DateTime.Today, DateTime.Today.AddDays(5), rentalItems);
+
+            var rentalToBeforeFrom = new RentalForCreateDTO("elena@uclm.es", "Elena Navarro",
+                "Avda. España s/n, Albacete", PaymentMethodTypes.CreditCard,
+                DateTime.Today.AddDays(5), DateTime.Today.AddDays(2), rentalItems);
+
+            var RentalApplicationUser = new RentalForCreateDTO("victor.lopez@uclm.es", "Elena Navarro",
+                "Avda. España s/n, Albacete", PaymentMethodTypes.CreditCard,
+                DateTime.Today.AddDays(2), DateTime.Today.AddDays(4), rentalItems);
+
+            var rentalMovieNotAvailable = new RentalForCreateDTO("elena@uclm.es", "Elena Navarro",
+                "Avda. España s/n, Albacete", PaymentMethodTypes.CreditCard,
+                DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
+                new List<RentalItemDTO>() { new RentalItemDTO(1, "The lord of the rings", "Sci - Fi", 1.0) });
+
+
+            var allTests = new List<object[]>
+            {             //input for createpurchase - Error expected
+                new object[] { rentalNoITem, "Error! You must include at least one movie to be rented",  },
+                new object[] { rentalFromBeforeToday, "Error! Your rental date must start later than today", },
+                new object[] { rentalToBeforeFrom, "Error! Your rental must end later than it starts", },
+                new object[] { RentalApplicationUser, "Error! UserName is not registered", },
+                new object[] { rentalMovieNotAvailable, "Error! Movie titled 'The lord of the rings' is not available for being rented from", },
+            };
+
+            return allTests;
+        }
+
+        [Theory]
+        [Trait("LevelTesting", "Unit Testing")]
+        [Trait("Database", "WithoutFixture")]
+        [MemberData(nameof(TestCasesFor_CreatePurchase))]
+        public async Task CreateRental_Error_test(RentalForCreateDTO rentalDTO, string errorExpected) {
+            // Arrange
+            var mock = new Mock<ILogger<RentalsController>>();
+            ILogger<RentalsController> logger = mock.Object;
+
+            var controller = new RentalsController(_context, logger);
+
+            // Act
+            var result = await controller.CreateRental(rentalDTO);
+
+            //Assert
+            //we check that the response type is BadRequest and obtain the error returned
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var problemDetails = Assert.IsType<ValidationProblemDetails>(badRequestResult.Value);
+
+            var errorActual = problemDetails.Errors.First().Value[0];
+
+            //we check that the expected error message and actual are the same
+            Assert.StartsWith(errorExpected, errorActual);
+
+        }
+
     }
 }
+
