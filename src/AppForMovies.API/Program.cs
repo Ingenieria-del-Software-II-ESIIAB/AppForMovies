@@ -44,7 +44,7 @@ switch (connection2Database) {
 //Add Identity services to the container
 builder.Services.AddAuthorization();
 //Activate Identity APIs 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -74,6 +74,7 @@ var app = builder.Build();
 
 //Map Identity routes
 //app.MapIdentityApi<IdentityUser>();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 using (var scope = app.Services.CreateScope()) {
     try {
@@ -89,10 +90,9 @@ using (var scope = app.Services.CreateScope()) {
 
 
         //it sees the database
-        //SeedData.Initialize(db, scope.ServiceProvider);
+        SeedData.Initialize(db, scope.ServiceProvider, logger);
     }
     catch (Exception ex) {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred seeding the DB.");
     }
 }
