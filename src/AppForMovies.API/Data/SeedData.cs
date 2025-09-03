@@ -26,6 +26,16 @@
             catch (Exception ex) {
                 logger.LogError(ex, "An error occurred seeding the Movies and Genres in the Database.");
             }
+
+            try {
+                var user = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(u => u.UserName == "elena@uclm.es");
+
+                //it initializes the database with a Rental
+                SeedRental(dbContext, user);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "An error occurred seeding a Rental in the Database.");
+            }
         }
 
         public static void SeedRoles(RoleManager<IdentityRole> roleManager, List<string> roles) {
@@ -129,6 +139,22 @@
 
             dbcontext.SaveChanges();
 
+
+        }
+
+        public static void SeedRental(ApplicationDbContext dbcontext, ApplicationUser user) {
+
+            if (dbcontext.Rentals.FirstOrDefault(p => p.Id == 1) == null) {
+                var movie = dbcontext.Movies.First();
+                var rental = new Rental("elena@uclm.es", "Elena Navarro", user,
+                                   "Avda. España s/n, Albacete 02071",
+                                   DateTime.Now, AppForMovies.API.Models.PaymentMethodTypes.CreditCard,
+                                   DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
+                                   new List<RentalItem>());
+                rental.RentalItems.Add(new RentalItem(movie, rental));
+                dbcontext.Rentals.Add(rental);
+            }
+            dbcontext.SaveChanges();
 
         }
 
