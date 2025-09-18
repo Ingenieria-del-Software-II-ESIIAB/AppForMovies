@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using AppForMovies.Web.API;
 using AppForMovies.Web.Components;
 using AppForMovies.Web.Components.Account;
 using AppForMovies.Web.Data;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,11 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+//the environment variable is defined in Properties\launchsettings.json
+builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>
+        new AppForMoviesAPIClient(Environment.GetEnvironmentVariable("AppForMovies_API"), new HttpClient())
+    );
 
 var app = builder.Build();
 
