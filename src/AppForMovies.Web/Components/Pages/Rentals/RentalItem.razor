@@ -1,0 +1,22 @@
+﻿@using AppForMovies.Web.API
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div class="p-2">
+                <p class="card-title" id="MovieSelected_@Item.Title">@Item.Title (@Item.PriceForRenting €)</p>
+            </div>
+            <div class="p-2">
+                <button class="btn-close" aria-label="Close" id="removeMovie_@Item.Title" @onclick="@(() => OnRemovedItem.InvokeAsync(Item))"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public RentalItemDTO Item { get; set; }
+
+    [Parameter] public EventCallback<RentalItemDTO> OnRemovedItem { get; set; }
+
+
+}
