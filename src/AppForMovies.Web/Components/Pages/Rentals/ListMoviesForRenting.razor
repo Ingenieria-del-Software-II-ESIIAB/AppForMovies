@@ -27,7 +27,7 @@
     <div class="row" hidden="@hiddenRentingCart">
         @foreach (RentalItemDTO item in rental.RentalItems)
         {
-            
+            <RentalItem Item="item" OnRemovedItem="@(() => RemoveRentalItem(item))"></RentalItem>
         }
     </div>
 
