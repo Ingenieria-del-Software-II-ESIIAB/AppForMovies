@@ -1,6 +1,7 @@
 ﻿@page "/rentals/listmoviesforrenting"
 @using AppForMovies.Web.API
 @using AppForMovies.Web.Components.Shared
+@using Microsoft.AspNetCore.Authorization
 
 
 @inject ILogger<ListMoviesForRenting> logger
@@ -9,6 +10,7 @@
 @inject NavigationManager navigation
 
 
+@attribute [Authorize]
 
 <h3>Select Movies For Renting</h3>
 <div class="container-fluid">
