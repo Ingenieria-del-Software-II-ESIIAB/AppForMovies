@@ -1,3 +1,4 @@
+using AppForMovies.Web;
 using AppForMovies.Web.API;
 using AppForMovies.Web.Components;
 using AppForMovies.Web.Components.Account;
@@ -40,6 +41,10 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>
         new AppForMoviesAPIClient(Environment.GetEnvironmentVariable("AppForMovies_API"), new HttpClient())
     );
+
+//adding an In-memory state container service
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<RentalStateContainer>();
 
 var app = builder.Build();
 
