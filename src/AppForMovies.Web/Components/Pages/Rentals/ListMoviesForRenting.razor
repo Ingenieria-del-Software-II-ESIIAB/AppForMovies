@@ -1,5 +1,10 @@
-﻿<h3>ListMoviesForRenting</h3>
+﻿@page "/rentals/listmoviesforrenting"
+@using AppForMovies.Web.API
 
-@code {
 
-}
+@inject ILogger<ListMoviesForRenting> logger
+@inject AppForMoviesAPIClient apiservice
+@inject RentalStateContainer rentalState
+@inject NavigationManager navigation
+
+
