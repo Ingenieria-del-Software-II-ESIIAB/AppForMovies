@@ -1,5 +1,6 @@
 ﻿@page "/rentals/listmoviesforrenting"
 @using AppForMovies.Web.API
+@using AppForMovies.Web.Components.Shared
 
 
 @inject ILogger<ListMoviesForRenting> logger
@@ -8,3 +9,256 @@
 @inject NavigationManager navigation
 
 
+
+<h3>Select Movies For Renting</h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <div><b>Movies Selected:</b> @rental.RentalItems.Count</div>
+            <div><b>Days for renting:</b> @DaysForRental </div>
+            <button class="btn btn-primary" id="Rent" @onclick="@RentMovies" disabled="@RentButtonDisabled">Rent movies</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <button class="btn btn-outline-primary" id="showRentingCart" @onclick="@ToggleRentingCart">Renting Cart: @rental.TotalPrice €</button>
+    </div> 
+
+    <div class="row" hidden="@hiddenRentingCart">
+        @foreach (RentalItemDTO item in rental.RentalItems)
+        {
+            
+        }
+    </div>
+
+      
+
+    <div class="row">
+        <p></p>
+        <h5>Filter Movies</h5>
+        <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Title</span>
+                </div>
+                <input type="text" class="form-control" @bind="movieTitle" id="movieTitle">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Genre</span>
+                </div>
+                @*<input type="text" class="form-control" @bind="@movieGenre" id="movieGenre">*@
+                <select class="form-select" aria-label="Default select" @bind="movieGenreSelected" id="selectGenre">
+                    <option value="All" selected>All</option>
+                    @foreach (string genreName in genresNames)
+                    {
+                        <option value="@genreName" id="genreNameSelected_@genreName">@genreName</option>
+                    }
+                </select>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">From</span>
+                </div>
+            @* <input  @bind:format="dd/MM/yyyy" class="form-control" @bind="From" id="fromDate"> *@
+
+            <InputDate @bind-Value="@From" id="fromDate" />
+                <div class="input-group-prepend">
+                    <span class="input-group-text">To</span>
+                </div>
+            <InputDate  id="toDate" @bind-Value="@To"/>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" id="searchMovies" @onclick="@SearchMovies">Search available movies</button>
+                </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div class="container-fluid">
+            @if (Movies.Count() == 0)
+            {
+                <p><em>There are no movies available for being rented</em></p>
+            }
+            else
+            {
+                <div class="mh-100 table-responsive">
+                    <table class="table table-condensed table-hover" id="TableOfMovies">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Genre</th>
+                                <th>Release Date</th>
+                                <th>Price For Renting</th>
+                                <th>Rent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var movie in Movies)
+                            {
+                                <tr id="MovieData_@movie.Title">
+                                    <td>@movie.Title</td>
+                                    <td>@movie.Genre</td>
+                                    <td>@movie.ReleaseDate.DateTime.ToShortDateString()</td>
+                                    <td>@movie.PriceForRenting</td>
+                                    <td>
+                                        <button class="btn btn-outline-secondary" id="movieToRent_@movie.Title" @onclick="@(()=>AddMovie(movie))">Add</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+@*a modal popup dialog to inform user about problems*@
+@if (DialogOKIsOpen)
+{
+    <Dialog Caption="Error!"
+            Message="@DialogOKMessage"
+            OnClose="@OnDialogOKClose"
+            Type=Dialog.Category.Okay>
+    </Dialog>
+}
+
+@code {
+
+    private bool DialogOKIsOpen;
+    private string DialogOKMessage;
+    private void OpenDialogOK(string message)
+    {
+        DialogOKIsOpen = true;
+        DialogOKMessage = message;
+    }
+    private async Task OnDialogOKClose()
+    {
+        DialogOKIsOpen = false;
+    }
+
+    private bool hiddenRentingCart = true;
+    private void ToggleRentingCart()
+    {
+        hiddenRentingCart = !hiddenRentingCart;
+    }
+
+    private ICollection<MovieForRentalDTO>? Movies { get; set; } = new List<MovieForRentalDTO>();
+    private string movieTitle;
+    private string movieGenre;
+
+    private DateTime _from;
+    private DateTime From { 
+        get {return _from; } 
+        set { 
+            if (_from != value)
+            {
+                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                _from = value;
+                rental.RentalDateFrom = DateTime.SpecifyKind(_from, DateTimeKind.Utc);
+                rentalState.ClearRentingCart();
+            }
+        } 
+    }
+
+    private DateTime _to;
+    private DateTime To
+    {
+        get { return _to; }
+        set
+        {
+            if (_to != value)
+            {
+                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                _to = value;
+                rental.RentalDateTo = DateTime.SpecifyKind(_to, DateTimeKind.Utc);
+                rentalState.ClearRentingCart();
+            }
+        }
+    }
+
+
+    private string error;
+    private RentalForCreateDTO rental => rentalState.Rental;
+    private int DaysForRental { get { return (rental.RentalDateTo - rental.RentalDateFrom).Days; } }
+    private bool RentButtonDisabled { get { return rental.RentalItems.Count == 0; } }
+
+    private ICollection<string>? genresNames = new List<string>();
+    private string movieGenreSelected;
+
+    private void AddMovie(MovieForRentalDTO movie)
+    {
+        rentalState.AddMovieToRental(movie);
+    }
+
+    private void RemoveRentalItem(RentalItemDTO item)
+    {
+        rentalState.RemoveRentalItemToRent(item);
+        if (rental.RentalItems.Count == 0) hiddenRentingCart = true;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            genresNames = await apiservice.GetGenresAsync(null);
+        }
+        catch (ApiException ex)
+        {
+            if (genresNames == null) genresNames = new List<string>() { "All", };
+            logger.LogError("Error! There was an error while connecting to the GetGenresAsync service");
+        }
+
+        //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
+        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
+        _from = (_from == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc)
+            : _from;
+        rental.RentalDateFrom = _from;
+
+        //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
+        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
+        _to = (_to == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Utc)
+            : _to;
+        rental.RentalDateTo =_to;
+
+
+        //we obtained the list of movies to be shown
+        SearchMovies();
+    }
+
+
+    protected async void SearchMovies()
+    {
+        movieGenre = movieGenreSelected == "All" ? null : movieGenreSelected;
+
+        if (rental.RentalDateFrom > rental.RentalDateTo)
+        {
+            OpenDialogOK("Your rental must end after than its starts");
+            return;
+        }
+
+        if (rental.RentalDateFrom < DateTime.Today || rental.RentalDateTo < DateTime.Today)
+        {
+            OpenDialogOK("Your rental period must be later");
+            return;
+        }
+
+        try
+        {
+            Movies = await apiservice.GetMoviesForRentalAsync(movieTitle, movieGenre, rental.RentalDateFrom, rental.RentalDateTo);
+        }
+        catch (ApiException ex)
+        {
+            Movies = new List<MovieForRentalDTO>();
+            logger.LogError("Error! There was an error while connecting to the GetMoviesForRentalAsync service");
+        }
+
+        //the web page is refreshed
+        StateHasChanged();
+
+    }
+    private void RentMovies()
+    {
+        navigation.NavigateTo("/rentals/createrental");
+    }
+
+}
