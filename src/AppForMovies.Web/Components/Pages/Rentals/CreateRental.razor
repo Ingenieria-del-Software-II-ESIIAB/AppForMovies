@@ -1,15 +1,16 @@
 ﻿@page "/rentals/createrental"
 @using AppForMovies.Web.API
 @using System.ComponentModel.DataAnnotations
-
+@using Microsoft.AspNetCore.Authorization
 @using System.Text.Json
+@using AppForMovies.Web.Components.Shared
 @inject AppForMovies.Web.API.AppForMoviesAPIClient apiservice
 
 
 @inject RentalStateContainer rentalState
 @inject NavigationManager Navigation
 
-
+@attribute [Authorize]
 
 <h3>Rental</h3>
 <EditForm Model="rental" OnValidSubmit="OpenDialog">
@@ -57,9 +58,9 @@
 <p><b>Date from:</b> @rental.RentalDateFrom.ToString("dd/MM/yyyy") <b>to:</b> @rental.RentalDateTo.ToString("dd/MM/yyyy")</p>
 <p>
     <b>Total price:</b> @rental.TotalPrice €                 
-
-
-
+    <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyMovies">
+        Modify movies
+    </button>
 </p>
     <div class="mh-100 table-responsive">
         <table class="table table-condensed table-hover" id="TableOfRentalItems">
@@ -116,10 +117,10 @@
         DialogIsOpen = true;
     }
 
-    
-    
-        
-    
+    private void ModifyRentalItems()
+    {
+        Navigation.NavigateTo("/rentals/listmoviesforrenting");
+    }
 
     private async Task OnDialogClose(bool isOk)
     {
@@ -190,9 +191,24 @@
     protected override async Task OnInitializedAsync()
     {
 
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
 
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    rental.CustomerUserName= user.Identity.Name;
+                }
+            }
+        }
     }
 
 
-    
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+
 }
