@@ -1,8 +1,9 @@
 ﻿@page "/rentals/detailrental"
 @using AppForMovies.Web.API
+@using Microsoft.AspNetCore.Authorization
 @inject AppForMoviesAPIClient apiservice
 
-
+@attribute [Authorize]
 
 <h3>Rental</h3>
 
@@ -72,15 +73,39 @@
     private RentalDetailDTO rental;
     private string error = "";
 
-  
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
 
         //we check the user is logged in
+        string userName = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
 
-        rental = await apiservice.GetRentalAsync(RentalID);
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+                    userName = user.Identity.Name;
+                }
+            }
+        }
 
+        try {
+            rental = await apiservice.GetRentalAsync(RentalID);
+        }
+        catch (ApiException exception)
+        {
+            rental = null;    
+        }
+        if ((rental == null) || (rental.CustomerUserName != userName))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a rental with id={RentalID}";
+        }
 
 
     }
