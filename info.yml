@@ -1,0 +1,28 @@
+project:
+  name: 'ISII-2526-GrupoI-SEIITeam'
+  owner: 'GrupoI'
+  teamId: 'SEIITeam'
+  identities: {}
+  notifications:
+    email: 'elena.navarro@uclm.es,Aurora.Macias@alu.uclm.es,Clara.Ayora@uclm.es,MariaElena.Pretel@uclm.es, Noelia.Gonzalez@uclm.es'
+  members:
+    member1:
+      name: 'Elena'
+      surname: 'Navarro' 
+      githubUsername: 'ElenaNavarro'
+    member2:
+      name: 'Aurora'
+      surname: 'Macías' 
+      githubUsername: 'auroramo'
+    member3:
+      name: 'Clara'
+      surname: 'Ayora' 
+      githubUsername: 'claayes'
+    member4:
+      name: 'Elena'
+      surname: 'Pretel' 
+      githubUsername: 'ElenaPretelFdez'
+    member5:
+      name: 'Noelia'
+      surname: 'Gonzalez' 
+      githubUsername: 'N0eliaGS'
