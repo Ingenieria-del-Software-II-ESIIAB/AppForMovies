@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace AppForMovies.UIT.RentalMovies {
     public class UCRentalMovies_UIT: UC_UIT {
 
-        public UCRentalMovies_UIT(ITestOutputHelper output) :base(output) { }
+        public UCRentalMovies_UIT(ITestOutputHelper output) :base(output) {
+            Initial_step_opening_the_web_page();
+        }
 
         private const int movieId1 = 1;
         private const string movieTitle1 = "The last of us";
@@ -23,18 +25,33 @@ namespace AppForMovies.UIT.RentalMovies {
         private const string movieReleaseDate2 = "15/01/2015";
 
         private void Precondition_perform_login() {
-            _driver.Navigate()
-                    .GoToUrl(_URI + "Identity/Account/Login");
-            // _driver.FindElement(By.Id("Input_Email"))
-            //     .SendKeys("elena.navarro@uclm.es");
-            _driver.FindElement(By.Id("Input_Email"))
-                .SendKeys("elena@uclm.es");
+            Perform_login("elena@uclm.es", "Password1234%");
+        }
 
-            _driver.FindElement(By.Id("Input_Password"))
-                .SendKeys("Password1234%");
 
-            _driver.FindElement(By.Id("login-submit"))
-                .Click();
+        [Theory]
+        [InlineData(movieTitle1, movieGenre1, movieReleaseDate1, moviePriceForRenting1, "last of", "")]
+        [InlineData(movieTitle2, movieGenre2, movieReleaseDate2, moviePriceForRenting2, "", movieGenre2)]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_4_5_AF1_filteringbyTitleandGenre(string title, string genre,
+            string releasedate, string price, string filterTitle, string filterGenre) {
+            //Arrange
+            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+
+
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            var expectedMovies = new List<string[]> { new string[] { title, genre, releasedate, price }, };
+            //Act
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
+
+            listmovies.FilterMovies(filterTitle, filterGenre, from, to);
+
+            //Assert            
+            Assert.True(listmovies.CheckListOfMovies(expectedMovies));
+
         }
 
 
