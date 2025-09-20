@@ -177,5 +177,95 @@ namespace AppForMovies.UIT.RentalMovies {
             Assert.True(createrental.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_16_AF6_ModifyRentalItems() {
+            //Arrange
+
+            var createrental = new CreateRental_PO(_driver, _output);
+
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            //Act
+            InitialStepsForRentalMovies_UIT();
+
+            listmovies.FilterMovies("", "", from, to);
+            listmovies.SelectMovies(new List<string> { movieTitle1, movieTitle2 });
+            listmovies.RentMovies();
+            createrental.PressModifyMovies();
+            //we remove movietitle2 from the rentingcart
+            listmovies.ModifyRentingCart(movieTitle2);
+            listmovies.RentMovies();
+
+            //Assert
+            //the list of movies must change
+            var expectedRentalItems = new List<string[]> { new string[] { movieTitle1, movieGenre1, moviePriceForRenting1 }, };
+            Assert.True(createrental.CheckListOfRentalItems(expectedRentalItems));
+        }
+
+        [Fact(Skip = "First change the quantifyofrenting of the movies to 0 using script dbo.Movies.QuantityForRenting0")]
+        //[Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_17_AF0_MoviesNotAvailableForRentalPeriod() {
+            //Arrange
+ 
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            var expectedMessage = "There are no movies available for being rented";
+            //Act
+            InitialStepsForRentalMovies_UIT();
+
+            listmovies.FilterMovies("", "", from, to);
+
+            //Assert
+            //this message will be shown if assert fails
+            Assert.True(listmovies.CheckMessageErrorNotAvaibleMovies(expectedMessage), $"Movie {movieTitle2} with genre {movieGenre2} does not exist");
+
+        }
+
+        [Theory]
+        [InlineData("Elena Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "CreditCard")]
+        [InlineData("Elena Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "PayPal")]
+        [InlineData("Elena Navarro", "Calle de la Universidad 1, Albacete, 02006, España", "Cash")]
+
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_1_2_3_BasicFlow(string nameSurname, string deliveryAddress, string paymentMethod) {
+            //Arrange
+
+            var createrental = new CreateRental_PO(_driver, _output);
+            var detailRental = new DetailRental_PO(_driver, _output);
+
+            var from = DateTime.Today.AddDays(1);
+            var to = DateTime.Today.AddDays(2);
+
+
+
+            //Act
+            InitialStepsForRentalMovies_UIT();
+
+            listmovies.FilterMovies("", "", from, to);
+            listmovies.SelectMovies(new List<string> { movieTitle1 });
+            listmovies.RentMovies();
+
+            createrental.FillInRentalInfo(nameSurname, deliveryAddress, paymentMethod);
+            createrental.FillInRentalDescription(movieRentalDescription1, movieId1);
+            createrental.PressRentYourMovies();
+            createrental.PressOkModalDialog();
+
+
+            //Assert
+            //the expected error is shown in the view
+            Assert.True(detailRental.CheckRentalDetail(nameSurname,
+                deliveryAddress, paymentMethod, DateTime.Now, from, to, moviePriceForRenting1 + " €"),
+                "Error: detail rental is not as expected");
+
+            var expectedRentalItems = new List<string[]>
+                    { new string[] { movieTitle1, movieGenre1, moviePriceForRenting1+" €" , movieRentalDescription1}, };
+
+            Assert.True(detailRental.CheckListOfMovies(expectedRentalItems),
+                "Error: rental items are not as expected");
+
+        }
+
     }
 }
