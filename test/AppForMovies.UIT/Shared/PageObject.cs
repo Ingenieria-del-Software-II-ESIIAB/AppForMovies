@@ -117,6 +117,27 @@ namespace AppForMovies.UIT.Shared {
 
         }
 
+        public void WaitForBeingVisibleIgnoringExeptionTypes(By IdElement) {
+            //used whenever the webelement needs a delay for being clickable
+            var wait = new WebDriverWait(_driver, new TimeSpan(0, 10, 0));
+
+
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException),
+                typeof(WebDriverTimeoutException),
+                typeof(UnhandledAlertException),
+                typeof(ElementClickInterceptedException));
+            bool notFoundButton = true;
+            while (notFoundButton) {
+                try {
+                    wait.Until(ExpectedConditions.ElementIsVisible(IdElement));
+                    notFoundButton = false;
+                }
+                catch (ElementClickInterceptedException ex) {
+
+                }
+            }
+        }
+
 
         public void WaitForTextToBePresentInElement(By IdElement, string expectedText) {
             //used whenever the webelement needs a delay for being clickable
