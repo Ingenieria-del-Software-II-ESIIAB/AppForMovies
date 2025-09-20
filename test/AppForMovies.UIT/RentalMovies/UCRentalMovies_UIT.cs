@@ -10,6 +10,7 @@ namespace AppForMovies.UIT.RentalMovies {
 
         public UCRentalMovies_UIT(ITestOutputHelper output) :base(output) {
             Initial_step_opening_the_web_page();
+            listmovies = new ListMoviesForRental_PO(_driver, _output);
         }
 
         private const int movieId1 = 1;
@@ -24,8 +25,16 @@ namespace AppForMovies.UIT.RentalMovies {
         private const string moviePriceForRenting2 = "3";
         private const string movieReleaseDate2 = "15/01/2015";
 
+        private ListMoviesForRental_PO listmovies;
+
         private void Precondition_perform_login() {
             Perform_login("elena@uclm.es", "Password1234%");
+        }
+
+        private void InitialStepsForRentalMovies_UIT() {
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
         }
 
 
@@ -36,16 +45,12 @@ namespace AppForMovies.UIT.RentalMovies {
         public void UC2_4_5_AF1_filteringbyTitleandGenre(string title, string genre,
             string releasedate, string price, string filterTitle, string filterGenre) {
             //Arrange
-            var listmovies = new ListMoviesForRental_PO(_driver, _output);
-
 
             var from = DateTime.Today.AddDays(2);
             var to = DateTime.Today.AddDays(3);
             var expectedMovies = new List<string[]> { new string[] { title, genre, releasedate, price }, };
             //Act
-            Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
-            _driver.FindElement(By.Id("CreateRenting")).Click();
+            InitialStepsForRentalMovies_UIT();
 
             listmovies.FilterMovies(filterTitle, filterGenre, from, to);
 
@@ -59,15 +64,12 @@ namespace AppForMovies.UIT.RentalMovies {
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_6_AF1_filteringbyDate() {
             //Arrange
-            var listmovies = new ListMoviesForRental_PO(_driver, _output);
             var from = DateTime.Today.AddDays(2);
             var to = DateTime.Today.AddDays(3);
             var expectedMovies = new List<string[]> { new string[] { movieTitle1, movieGenre1, movieReleaseDate1, moviePriceForRenting1 },
                                                        new string[] { movieTitle2, movieGenre2, movieReleaseDate2, moviePriceForRenting2 },};
             //Act
-            Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
-            _driver.FindElement(By.Id("CreateRenting")).Click();
+            InitialStepsForRentalMovies_UIT();
 
             listmovies.FilterMovies("", "", from, to);
 
@@ -93,12 +95,10 @@ namespace AppForMovies.UIT.RentalMovies {
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_7_8_9_AF2_errorindates(DateTime from, DateTime to, string error) {
             //Arrange
-            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+
 
             //Act
-            Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
-            _driver.FindElement(By.Id("CreateRenting")).Click();
+            InitialStepsForRentalMovies_UIT();
 
             listmovies.FilterMovies("", "", from, to);
 
@@ -114,13 +114,11 @@ namespace AppForMovies.UIT.RentalMovies {
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_10_AF3_ModifySelectedMovies() {
             //Arrange
-            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+
             var from = DateTime.Today.AddDays(2);
             var to = DateTime.Today.AddDays(3);
             //Act
-            Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
-            _driver.FindElement(By.Id("CreateRenting")).Click();
+            InitialStepsForRentalMovies_UIT();
 
             listmovies.FilterMovies("", "", from, to);
             listmovies.SelectMovies(new List<string> { movieTitle1, movieTitle2 });
@@ -135,13 +133,11 @@ namespace AppForMovies.UIT.RentalMovies {
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_11_AF4_RentButtonNotAvailable() {
             //Arrange
-            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+
             var from = DateTime.Today.AddDays(2);
             var to = DateTime.Today.AddDays(3);
             //Act
-            Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
-            _driver.FindElement(By.Id("CreateRenting")).Click();
+            InitialStepsForRentalMovies_UIT();
 
             listmovies.FilterMovies("", "", from, to);
             listmovies.SelectMovies(new List<string> { movieTitle1 });
@@ -150,6 +146,35 @@ namespace AppForMovies.UIT.RentalMovies {
 
             //Assert            
             Assert.True(listmovies.CheckRentMoviesDisabled(), "Rent button should be disabled");
+        }
+
+
+        [Theory]
+        [InlineData("", "Calle de la Universidad 1, Albacete, 02006, España", "The CustomerNameSurname field is required")]
+        [InlineData("Elena", "Calle de la Universidad 1, Albacete, 02006, España", "The field CustomerNameSurname must be a string with a minimum length of 10 and a maximum length of 50")]
+        [InlineData("Elena Navarro", "", "The DeliveryAddress field is required")]
+        [InlineData("Elena Navarro", "Calle", "The field DeliveryAddress must be a string with a minimum length of 10 and a maximum length of 50")]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_12_13_14_15_AF5_testingErrorsMandatorydata(string nameSurname, string deliveryAddress,
+            string expectedMessageError) {
+            //Arrange
+
+            var createrental = new CreateRental_PO(_driver, _output);
+
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            //Act
+            InitialStepsForRentalMovies_UIT();
+
+            listmovies.FilterMovies("", "", from, to);
+            listmovies.SelectMovies(new List<string> { movieTitle1 });
+            listmovies.RentMovies();
+            createrental.FillInRentalInfo(nameSurname, deliveryAddress, "CreditCard");
+            createrental.PressRentYourMovies();
+
+            //Assert
+            //the expected error is shown in the view
+            Assert.True(createrental.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
         }
 
     }
