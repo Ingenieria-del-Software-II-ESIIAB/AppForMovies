@@ -13,7 +13,7 @@ namespace AppForMovies.UIT.Shared {
         //private string _browser = "Firefox";
         private  string _browser = "Edge";
 
-        IWebDriver _driver;
+        protected IWebDriver _driver;
         private readonly ITestOutputHelper _output;
 
 
