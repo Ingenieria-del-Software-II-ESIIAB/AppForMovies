@@ -1,0 +1,1 @@
+﻿UPDATE [dbo].[Movies] SET [QuantityForRenting]=100 

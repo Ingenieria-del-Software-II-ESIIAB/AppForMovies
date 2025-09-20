@@ -13,14 +13,14 @@ namespace AppForMovies.UIT.Shared {
         //private string _browser = "Firefox";
         private  string _browser = "Edge";
 
-        IWebDriver _driver;
-        private readonly ITestOutputHelper _output;
+        protected IWebDriver _driver;
+        protected readonly ITestOutputHelper _output;
 
 
         public string _URI {
             get {
                 //set url of your web page 
-                return "https://localhost:7197/";
+                return "https://localhost:7083/";
 
             }
         }
@@ -53,6 +53,21 @@ namespace AppForMovies.UIT.Shared {
         protected void Initial_step_opening_the_web_page() {
             _driver.Navigate()
                 .GoToUrl(_URI);
+        }
+
+        protected void Perform_login(string email, string password) {
+            _driver.Navigate()
+                    .GoToUrl(_URI + "Account/Login");
+            // _driver.FindElement(By.Id("Input_Email"))
+            //     .SendKeys("elena.navarro@uclm.es");
+            _driver.FindElement(By.Name("Input.Email"))
+                .SendKeys(email);
+
+            _driver.FindElement(By.Name("Input.Password"))
+                .SendKeys(password);
+
+            _driver.FindElement(By.XPath("/html/body/div[1]/main/article/div/div[1]/section/form/div[4]/button"))
+                .Click();
         }
 
 
