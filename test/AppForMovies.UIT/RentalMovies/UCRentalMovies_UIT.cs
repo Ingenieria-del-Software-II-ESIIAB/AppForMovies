@@ -109,5 +109,48 @@ namespace AppForMovies.UIT.RentalMovies {
 
         }
 
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_10_AF3_ModifySelectedMovies() {
+            //Arrange
+            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            //Act
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
+
+            listmovies.FilterMovies("", "", from, to);
+            listmovies.SelectMovies(new List<string> { movieTitle1, movieTitle2 });
+            listmovies.ModifyRentingCart(movieTitle2);
+
+
+            //Assert            
+            Assert.True(listmovies.CheckShoppingCart(moviePriceForRenting1));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_11_AF4_RentButtonNotAvailable() {
+            //Arrange
+            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            //Act
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
+
+            listmovies.FilterMovies("", "", from, to);
+            listmovies.SelectMovies(new List<string> { movieTitle1 });
+            listmovies.ModifyRentingCart(movieTitle1);
+
+
+            //Assert            
+            Assert.True(listmovies.CheckRentMoviesDisabled(), "Rent button should be disabled");
+        }
+
     }
 }
