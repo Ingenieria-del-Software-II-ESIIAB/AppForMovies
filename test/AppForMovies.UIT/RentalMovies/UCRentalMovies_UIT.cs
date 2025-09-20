@@ -77,5 +77,37 @@ namespace AppForMovies.UIT.RentalMovies {
 
         }
 
+        public static IEnumerable<object[]> TestCasesFor_UC2_4_5_AF2_errorindates() {
+            var allTests = new List<object[]> {
+                new object[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(2), "Your rental period must be later",  },
+                //cannot be checked if datetime is before today, because the next condition is checked before
+                new object[] { DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1), "Your rental period must be later", },
+                new object[] { DateTime.Today.AddDays(7), DateTime.Today.AddDays(5), "Your rental must end after than its starts", },
+            };
+
+            return allTests;
+        }
+
+        [Theory]
+        [MemberData(nameof(TestCasesFor_UC2_4_5_AF2_errorindates))]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_7_8_9_AF2_errorindates(DateTime from, DateTime to, string error) {
+            //Arrange
+            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+
+            //Act
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
+
+            listmovies.FilterMovies("", "", from, to);
+
+            //Assert
+
+            //this message will be shown if assert fails
+            Assert.True(listmovies.CheckMessageError(error), $"Error in the message box for test {from} - {to}");
+
+        }
+
     }
 }
