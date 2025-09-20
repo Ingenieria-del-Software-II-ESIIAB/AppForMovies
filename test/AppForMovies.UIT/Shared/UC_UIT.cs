@@ -44,10 +44,13 @@ namespace AppForMovies.UIT.Shared {
         }
 
 
+        protected void Initial_step_opening_the_web_page() {
+            _driver.Navigate()
+                .GoToUrl(_URI);
+        }
 
 
-
-        public  void SetUp_Chrome4UIT() {
+        protected void SetUp_Chrome4UIT() {
             var optionsc = new ChromeOptions {
                 PageLoadStrategy = PageLoadStrategy.Normal,
                 AcceptInsecureCertificates = true
@@ -59,7 +62,7 @@ namespace AppForMovies.UIT.Shared {
 
         }
 
-        public void SetUp_FireFox4UIT() {
+        protected void SetUp_FireFox4UIT() {
             var optionsff = new FirefoxOptions {
                 PageLoadStrategy = PageLoadStrategy.Normal,
                 AcceptInsecureCertificates = true
@@ -71,7 +74,7 @@ namespace AppForMovies.UIT.Shared {
 
         }
 
-        public void SetUp_EdgeFor4UIT() {
+        protected void SetUp_EdgeFor4UIT() {
             //var edgeDriverService = Microsoft.Edge.SeleniumTools.EdgeDriverService.CreateChromiumService();
             //var edgeOptions = new Microsoft.Edge.SeleniumTools.EdgeOptions();
             //edgeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
@@ -92,27 +95,6 @@ namespace AppForMovies.UIT.Shared {
 
         }
 
-
-        public void WaitForBeingVisible(IWebDriver _driver, By IdElement) {
-            //used whenever the webelement needs a delay for being clickable
-            var wait = new WebDriverWait(_driver, new TimeSpan(0, 10, 0));
-
-
-            wait.IgnoreExceptionTypes(typeof(NoSuchElementException),
-                typeof(WebDriverTimeoutException),
-                typeof(UnhandledAlertException),
-                typeof(ElementClickInterceptedException));
-            bool notFoundButton = true;
-            while (notFoundButton) {
-                try {
-                    wait.Until(ExpectedConditions.ElementIsVisible(IdElement));
-                    notFoundButton = false;
-                }
-                catch (ElementClickInterceptedException ex) {
-
-                }
-            }
-        }
 
         public void Dispose() {
             _driver.Close();
