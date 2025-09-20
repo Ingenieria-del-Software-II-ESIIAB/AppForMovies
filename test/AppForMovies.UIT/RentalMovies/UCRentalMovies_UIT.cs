@@ -55,6 +55,27 @@ namespace AppForMovies.UIT.RentalMovies {
         }
 
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_6_AF1_filteringbyDate() {
+            //Arrange
+            var listmovies = new ListMoviesForRental_PO(_driver, _output);
+            var from = DateTime.Today.AddDays(2);
+            var to = DateTime.Today.AddDays(3);
+            var expectedMovies = new List<string[]> { new string[] { movieTitle1, movieGenre1, movieReleaseDate1, moviePriceForRenting1 },
+                                                       new string[] { movieTitle2, movieGenre2, movieReleaseDate2, moviePriceForRenting2 },};
+            //Act
+            Precondition_perform_login();
+            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            _driver.FindElement(By.Id("CreateRenting")).Click();
+
+            listmovies.FilterMovies("", "", from, to);
+
+            //Assert
+
+            Assert.True(listmovies.CheckListOfMovies(expectedMovies));
+
+        }
 
     }
 }
