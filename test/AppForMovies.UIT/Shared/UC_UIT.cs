@@ -14,7 +14,7 @@ namespace AppForMovies.UIT.Shared {
         private  string _browser = "Edge";
 
         IWebDriver _driver;
-        ITestOutputHelper output;
+        private readonly ITestOutputHelper _output;
 
 
         public string _URI {
@@ -28,7 +28,7 @@ namespace AppForMovies.UIT.Shared {
         public UC_UIT(ITestOutputHelper output) {
 
             //it initializes where the errors will be shown
-            this._output = output;
+            _output = output;
 
             switch (_browser) {
                 case "Firefox":
