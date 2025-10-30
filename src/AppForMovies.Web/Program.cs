@@ -63,7 +63,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForMovies_API") as string;
 
-//the environment variable is defined in Properties\launchsettings.json
+//the environment variable is defined in Portal Azure
 builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>new AppForMoviesAPIClient(URI2API, new HttpClient()));
 
 //adding an In-memory state container service
