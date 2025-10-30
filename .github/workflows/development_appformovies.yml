@@ -28,6 +28,10 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Restore dependencies        
+        run: |  
+          dotnet restore ${{ env.WEB }} 
+
       - name: Build with dotnet
         run: |
           dotnet build ${{ env.WEB }}  --configuration Release --no-restore
