@@ -25,6 +25,10 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Restore dependencies        
+        run: |  
+          dotnet restore ${{ env.API }} 
+
       - name: Build with dotnet
         run: |
           dotnet build ${{ env.API }}  --configuration Release --no-restore
