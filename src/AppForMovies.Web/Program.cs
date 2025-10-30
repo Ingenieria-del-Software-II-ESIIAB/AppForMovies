@@ -5,7 +5,9 @@ using AppForMovies.Web.Components.Account;
 using AppForMovies.Web.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +27,32 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+string? connection2Database = Environment.GetEnvironmentVariable("DBConnection2Use");
+
+// If we are using the Production Environment, then the AZURE DB should be used,
+// otherwise the localdb or SQLite should be used
+//https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?source=recommendations&view=aspnetcore-7.0
+switch (connection2Database) {
+    case "SQLite":
+        DbConnection _connection = new SqliteConnection("Filename=:memory:");
+        //connection in case a persistent database is required
+        //DbConnection _connection = new SqliteConnection("Data Source=Application.db;Cache=Shared");
+        _connection.Open();
+        builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlite(_connection));
+        break;
+
+    case "AzureSQL":
+        builder.Services.AddDbContext<ApplicationDbContext>(opt =>
+                       opt.UseSqlServer(Environment.GetEnvironmentVariable("AzureSQL")));
+
+        break;
+    default:
+        //the localdb is used
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(connectionString));
+        break;
+}
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -37,9 +61,11 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForMovies_API") as string;
+
 //the environment variable is defined in Properties\launchsettings.json
 builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>
-        new AppForMoviesAPIClient(Environment.GetEnvironmentVariable("AppForMovies_API"), new HttpClient())
+        new AppForMoviesAPIClient(URI2API, new HttpClient())
     );
 
 //adding an In-memory state container service
