@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - development
+    paths:
+      - 'src/AppForMovies.Web**'
+
   workflow_dispatch:
 
 jobs:
@@ -15,7 +18,7 @@ jobs:
     permissions:
       contents: read #This is required for actions/checkout
     env:
-      WEB: ./src/AppForMovies.API/AppForMovies.Web.csproj
+      WEB: ./src/AppForMovies.Web/AppForMovies.Web.csproj
 
     steps:
       - uses: actions/checkout@v4
