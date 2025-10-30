@@ -64,9 +64,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForMovies_API") as string;
 
 //the environment variable is defined in Properties\launchsettings.json
-builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>
-        new AppForMoviesAPIClient(URI2API, new HttpClient())
-    );
+builder.Services.AddScoped<AppForMoviesAPIClient>(sp =>new AppForMoviesAPIClient(URI2API, new HttpClient()));
 
 //adding an In-memory state container service
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
@@ -98,3 +96,4 @@ app.MapRazorComponents<App>()
 app.MapAdditionalIdentityEndpoints();
 
 app.Run();
+
