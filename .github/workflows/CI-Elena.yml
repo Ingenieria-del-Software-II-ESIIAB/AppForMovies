@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      API: ./src/AppForSEII2526.API/AppForSEII2526.API.csproj
-      WEB: ./src/AppForSEII2526.Web/AppForSEII2526.Web.csproj
-      UT:  ./test/AppForSEII2526.UT/AppForSEII2526.UT.csproj
-      UIT: ./test/AppForSEII2526.UIT/AppForSEII2526.UIT.csproj
+      API: ./src/AppForMovies.API/AppForMovies.API.csproj
+      WEB: ./src/AppForMovies.Web/AppForMovies.Web.csproj
+      UT:  ./test/AppForMovies.UT/AppForMovies.UT.csproj
+      UIT: ./test/AppForMovies.UIT/AppForMovies.UIT.csproj
       
     steps:
       - name: Check out repository code 
