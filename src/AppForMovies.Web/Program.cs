@@ -27,8 +27,8 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-string? connection2Database = Environment.GetEnvironmentVariable("DBConnection2Use");
-
+//string? connection2Database = Environment.GetEnvironmentVariable("DBConnection2Use");
+string? connection2Database = builder.Configuration.GetValue(typeof(string), "DBConnection2Use") as string;
 // If we are using the Production Environment, then the AZURE DB should be used,
 // otherwise the localdb or SQLite should be used
 //https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?source=recommendations&view=aspnetcore-7.0
