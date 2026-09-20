@@ -1,0 +1,16 @@
+@startuml
+class Movie {
+    + Movie()
+    + Movie(title:string, genre:Genre, releaseDate:DateTime, priceForPurchase:decimal, quantityForPurchase:int, priceForRenting:double, quantityForRenting:int)
+    + Id : int <<get>> <<set>>
+    + Title : string <<get>> <<set>>
+    + PriceForPurchase : decimal <<get>> <<set>>
+    + QuantityForPurchase : int <<get>> <<set>>
+    + PriceForRenting : double <<get>> <<set>>
+    + ReleaseDate : DateTime <<get>> <<set>>    
+    + QuantityForRenting : int <<get>> <<set>>
+}
+
+Movie -- "Genre" Genre
+Movie o-- "0..* RentalItems" "RentalItem"
+@enduml
