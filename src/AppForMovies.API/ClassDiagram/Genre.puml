@@ -1,0 +1,10 @@
+@startuml
+class Genre {
+    + Genre()
+    + Genre(name:string)
+    + Id : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+}
+
+Genre o-- "0..* Movies" "Movie"
+@enduml

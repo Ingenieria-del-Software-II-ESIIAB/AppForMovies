@@ -1,0 +1,24 @@
+@startuml
+class Rental {
+    + Rental()
+    + Rental(customerUserName:string, customerNameSurname:string, applicationUser:ApplicationUser, deliveryAddress:string, rentalDate:DateTime, paymentMethod:PaymentMethodTypes, rentalDateFrom:DateTime, rentalDateTo:DateTime, rentalItems:IList<RentalItem>)
+    + Id : int <<get>> <<set>>
+    + TotalPrice : double <<get>> <<set>>
+    + DeliveryAddress : string <<get>> <<set>>
+    + CustomerUserName : string <<get>> <<set>>
+    + CustomerNameSurname : string <<get>> <<set>>
+    + RentalDate : DateTime <<get>> <<set>>
+    + RentalDateTo : DateTime <<get>> <<set>>   
+    + RentalDateFrom : DateTime <<get>> <<set>> 
+    + PaymentMethod : PaymentMethodTypes <<get>> <<set>>      
+}
+enum PaymentMethodTypes {
+    CreditCard,
+    PayPal,
+    Cash,
+}
+
+
+Rental o-- "0..* RentalItems" "RentalItem"
+Rental -- "ApplicationUser" ApplicationUser
+@enduml

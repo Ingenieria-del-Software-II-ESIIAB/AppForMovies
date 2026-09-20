@@ -1,0 +1,15 @@
+@startuml
+class RentalItem {
+    + RentalItem()
+    + RentalItem(movie:Movie, rent:Rental)
+    + RentalItem(movie:Movie, rent:Rental, description:string?)
+    + RentalItem(movieId:int, rental:Rental, priceForRenting:double)
+    + RentalItem(movieId:int, rental:Rental, priceForRenting:double, description:string?)
+    + MovieId : int <<get>> <<set>>
+    + RentalId : int <<get>> <<set>>
+    + Description : string? <<get>> <<set>>
+    + PriceForRenting : double <<get>> <<set>>
+}
+RentalItem -- "Movie" Movie
+RentalItem -- "Rental" Rental
+@enduml
