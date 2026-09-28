@@ -9,9 +9,15 @@ left to right direction
 Genre "Genre" o--- "0 * Movies" Movie
 
 
-hide RentalItem
+
+
+
+
+
 hide Purchase
 hide PurchaseItem
 hide methods
+hide PaymentMethodTypes
+hide ApplicationUser
 
 @enduml

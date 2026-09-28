@@ -10,6 +10,5 @@ class RentalItem {
     + Description : string? <<get>> <<set>>
     + PriceForRenting : double <<get>> <<set>>
 }
-RentalItem -- "Movie" Movie
-RentalItem -- "Rental" Rental
+
 @enduml

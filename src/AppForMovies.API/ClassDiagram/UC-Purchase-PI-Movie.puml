@@ -1,0 +1,30 @@
+@startuml
+
+left to right direction
+
+hide methods
+' hide attributes
+
+!include .\PurchaseItem.puml
+
+!include .\\Movie.puml
+
+
+!include .\\Purchase.puml
+
+
+
+
+Movie "Movie"  o---  "0..* PurchaseItems"  PurchaseItem
+
+Purchase "Rental"  o---  "0..* PurchaseItems"  PurchaseItem
+
+
+hide Genre
+
+hide Rental
+hide RentalItem
+hide PaymentMethodTypes
+hide ApplicationUser
+
+@enduml
