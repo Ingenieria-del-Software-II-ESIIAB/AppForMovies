@@ -11,6 +11,5 @@ class Movie {
     + QuantityForRenting : int <<get>> <<set>>
 }
 
-Movie -- "Genre" Genre
-Movie o-- "0..* RentalItems" "RentalItem"
+
 @enduml

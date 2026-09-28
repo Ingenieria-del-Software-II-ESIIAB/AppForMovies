@@ -1,0 +1,12 @@
+@startuml
+
+!include .\\Genre.puml
+!include .\\Movie.puml
+!include .\\ApplicationUser.puml
+!include .\\Rental.puml
+!include .\\RentalItem.puml
+
+hide Purchase
+hide PurchaseItem
+
+@enduml

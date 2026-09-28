@@ -1,12 +1,17 @@
 @startuml
 
-!include .\\Genre.puml
+left to right direction
 !include .\\Movie.puml
-!include .\\ApplicationUser.puml
-!include .\\Rental.puml
-!include .\\RentalItem.puml
 
+!include .\\Genre.puml
+
+
+Genre "Genre" o--- "0 * Movies" Movie
+
+
+hide RentalItem
 hide Purchase
 hide PurchaseItem
+hide methods
 
 @enduml

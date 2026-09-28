@@ -6,5 +6,5 @@ class Genre {
     + Name : string <<get>> <<set>>
 }
 
-Genre o-- "0..* Movies" "Movie"
+
 @enduml
