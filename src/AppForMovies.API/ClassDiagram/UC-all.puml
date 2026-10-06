@@ -1,0 +1,38 @@
+@startuml
+
+left to right direction
+
+!include .\\Movie.puml
+!include .\\Genre.puml
+
+!include .\\RentalItem.puml
+!include .\\Rental.puml
+
+
+!include .\PurchaseItem.puml
+!include .\\Purchase.puml
+
+
+
+!include .\\ApplicationUser.puml
+
+Movie "Movie"  o---  "0..* RentalItems"  RentalItem
+
+Rental "Rental"  o---  "0..* RentalItems"  RentalItem
+
+ApplicationUser "User" o-- "0..* Rentals" Rental
+
+Movie "Movie"  o---  "0..* PurchaseItems"  PurchaseItem
+
+Purchase "Purchase"  o---  "0..* PurchaseItems"  PurchaseItem
+
+ApplicationUser "User" o-- "0..* Purchases" Purchase
+
+Genre "Genre" o--- "0 * Movies" Movie
+
+
+
+hide methods
+
+
+@enduml
