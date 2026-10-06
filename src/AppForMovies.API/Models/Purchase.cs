@@ -4,7 +4,7 @@
     {
         public Purchase()
         {
-            PurchaseItems = new List<PurchaseItem>();
+            
         }
 
         public Purchase(int purchaseId, string username, string customerNameSurname, ApplicationUser applicationUser, string deliveryAddress,
@@ -34,27 +34,27 @@
         public int Id { get; set; }
 
         [Precision(10, 2)]
-        public decimal TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }=10.2m;
 
 
-        public DateTime PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }=DateTime.Today;
 
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
         [Display(Name = "Delivery Address")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
-        public string DeliveryAddress { get; set; }
+        public string DeliveryAddress { get; set; }="Albacete";
 
-        public string CustomerUserName { get; set; }
+        public string CustomerUserName { get; set; }="peter.jackson@uclm.es";
 
-        public string CustomerNameSurname { get; set; }
+        public string CustomerNameSurname { get; set; }="Peter Jackson";
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }= new ApplicationUser();
 
-        public IList<PurchaseItem> PurchaseItems { get; set; }
+        public IList<PurchaseItem> PurchaseItems { get; set; }=new List<PurchaseItem>();
 
 
         [Display(Name = "Payment Method")]
-        public PaymentMethodTypes PaymentMethod { get; set; }
+        public PaymentMethodTypes PaymentMethod { get; set; }=PaymentMethodTypes.CreditCard;
     }
 }

@@ -7,6 +7,5 @@ class PurchaseItem {
     + Price : decimal <<get>> <<set>>
     + Quantity : int <<get>> <<set>>
 }
-PurchaseItem --> "Movie" Movie
-PurchaseItem --> "Purchase" Purchase
+
 @enduml

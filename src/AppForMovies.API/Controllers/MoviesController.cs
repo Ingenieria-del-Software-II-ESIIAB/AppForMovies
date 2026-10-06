@@ -16,11 +16,28 @@ namespace AppForMovies.API.Controllers
             _context = context;
             _logger = logger;
         }
+/*
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(decimal), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult> ComputeDivision(decimal op1, decimal op2)
+        {
+            if (op2 == 0)
+            {
+                _logger.LogError($"{DateTime.Now} Exception: op2=0, division by 0");
+                return BadRequest("op2 must be different from 0");
+            }
+            decimal result = decimal.Round(op1 / op2, 2);
+            return Ok(result);
+        }
 
+*/
 
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<MovieForRentalDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetMoviesForRental(string? movieTitle, string? movieGenre, DateTime? fromDate, DateTime? toDate)
         {
             //    var movies = await _context.Movies

@@ -6,5 +6,5 @@ class ApplicationUser {
     + Surname : string? <<get>> <<set>>
 }
 IdentityUser <|-- ApplicationUser
-ApplicationUser o-- "0..* Rentals" Rental
+
 @enduml

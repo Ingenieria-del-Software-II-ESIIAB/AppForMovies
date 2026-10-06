@@ -30,25 +30,22 @@ namespace AppForMovies.Shared.MovieDTOs
         public int Id { get; set; }
 
         [StringLength(50,ErrorMessage = "Title must have a maximun length of 50 characters")]
-        public string Title { get; set; }
+        public string Title { get; set; }="Title";
 
         [StringLength(50, ErrorMessage = "Genre must have a maximun length of 50 characters", MinimumLength = 4)]
-        public string Genre { get; set; }
+        public string Genre { get; set; }= "sci-fi";
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Release Date")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }=DateTime.Today;
 
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Range(1, float.MaxValue, ErrorMessage = "Minimum price is 1 ")]
-        [Display(Name = "Price For Renting")]
         public double PriceForRenting
         {
             get; set;
-        }
+        }=1;
         public DateTime? LastRental {  get; set; }
 
         public override bool Equals(object? obj)

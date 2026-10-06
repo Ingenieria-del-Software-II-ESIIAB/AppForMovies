@@ -1,0 +1,23 @@
+@startuml
+
+left to right direction
+!include .\\Movie.puml
+
+!include .\\Genre.puml
+
+
+Genre "Genre" o--- "0 * Movies" Movie
+
+
+
+
+
+
+
+hide Purchase
+hide PurchaseItem
+hide methods
+hide PaymentMethodTypes
+hide ApplicationUser
+
+@enduml

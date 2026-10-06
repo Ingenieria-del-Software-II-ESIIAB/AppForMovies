@@ -18,28 +18,27 @@
             RentalItems = new List<RentalItemDTO>();
         }
 
-        public DateTime RentalDateFrom { get; set; }
+        public DateTime RentalDateFrom { get; set; }=DateTime.Today;
 
-        public DateTime RentalDateTo { get; set; }
+        public DateTime RentalDateTo { get; set; }=DateTime.Today;
 
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
-        [Display(Name = "Delivery Address")]
         [StringLength(50, MinimumLength = 10, ErrorMessage = "Delivery address must have at least 10 characters")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
-        public string DeliveryAddress { get; set; }
+        public string DeliveryAddress { get; set; }="Albacete";
 
         [EmailAddress]
         [Required]
-        public string CustomerUserName { get; set; }
+        public string CustomerUserName { get; set; }="peter.jackson@uclm.es";
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name and Surname")]
         [StringLength(50, MinimumLength = 10, ErrorMessage = "Name and Surname must have at least 10 characters")]
-        public string CustomerNameSurname { get; set; }
+        public string CustomerNameSurname { get; set; }="Peter Jackson";
 
-        public IList<RentalItemDTO> RentalItems { get; set; }
+        public IList<RentalItemDTO> RentalItems { get; set; }=new List<RentalItemDTO>();
         [Required]
-        public PaymentMethodTypes PaymentMethod { get; set; }
+        public PaymentMethodTypes PaymentMethod { get; set; }=PaymentMethodTypes.CreditCard;
 
         private int NumberOfDays
         {
@@ -49,8 +48,7 @@
             }
         }
 
-        [Display(Name = "Total Price")]
-        [JsonPropertyName("TotalPrice")]
+
         public double TotalPrice
         {
             get
@@ -75,6 +73,11 @@
                    RentalItems.SequenceEqual(dTO.RentalItems) &&
                    PaymentMethod == dTO.PaymentMethod &&
                    TotalPrice == dTO.TotalPrice;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), RentalDateFrom, RentalDateTo,CustomerUserName);
         }
     }
 }

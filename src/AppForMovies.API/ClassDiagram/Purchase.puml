@@ -9,10 +9,6 @@ class Purchase {
     + CustomerUserName : string <<get>> <<set>>
     + CustomerNameSurname : string <<get>> <<set>>
 }
-class "IList`1"<T> {
-}
-Purchase --> "PurchaseDate" DateTime
-Purchase --> "ApplicationUser" ApplicationUser
-Purchase --> "PurchaseItems<PurchaseItem>" "IList`1"
-Purchase --> "PaymentMethod" PaymentMethodTypes
+
+
 @enduml

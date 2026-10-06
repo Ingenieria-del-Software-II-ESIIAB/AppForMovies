@@ -29,12 +29,12 @@
 
         public RentalItem(int movieId, Rental rental, double priceForRenting, string? description) : this(movieId, rental, priceForRenting) => Description = description;
 
-        public Movie Movie { get; set; }
+        public Movie Movie { get; set; }=new Movie();
 
         public int MovieId { get; set; }
 
 
-        public Rental Rent { get; set; }
+        public Rental Rent { get; set; }=new Rental();
 
         public int RentalId { get; set; }
 
