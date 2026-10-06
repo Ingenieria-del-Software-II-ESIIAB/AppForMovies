@@ -23,28 +23,28 @@
 
         public int Id { get; set; }
 
-        public double TotalPrice { get; set; }
+        public double TotalPrice { get; set; }=10.2;
 
-        public DateTime RentalDate { get; set; }
+        public DateTime RentalDate { get; set; }=DateTime.Today;
 
-        public DateTime RentalDateFrom { get; set; }
-        public DateTime RentalDateTo { get; set; }
+        public DateTime RentalDateFrom { get; set; }=DateTime.Today;
+        public DateTime RentalDateTo { get; set; }=DateTime.Today;
 
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
         [Display(Name = "Delivery Address")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
-        public string DeliveryAddress { get; set; }
+        public string DeliveryAddress { get; set; }="Albacete";
 
-        public string CustomerUserName { get; set; }
+        public string CustomerUserName { get; set; }="peter.jackson@uclm.es";
 
-        public string CustomerNameSurname { get; set; }
+        public string CustomerNameSurname { get; set; }="Peter Jackson";
         [Display(Name = "Payment Method")]
-        public PaymentMethodTypes PaymentMethod { get; set; }
+        public PaymentMethodTypes PaymentMethod { get; set; }=PaymentMethodTypes.CreditCard;
 
-        public IList<RentalItem> RentalItems { get; set; }
+        public IList<RentalItem> RentalItems { get; set; }= new List<RentalItem>();
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }=new ApplicationUser();
     }
 
     public enum PaymentMethodTypes

@@ -17,11 +17,11 @@
             Quantity = quantity;
         }
 
-        public Movie Movie { get; set; }
+        public Movie Movie { get; set; }=new Movie();
 
         public int MovieId { get; set; }
 
-        public Purchase Purchase { get; set; }
+        public Purchase Purchase { get; set; }=new Purchase();
 
         public int PurchaseId { get; set; }
 

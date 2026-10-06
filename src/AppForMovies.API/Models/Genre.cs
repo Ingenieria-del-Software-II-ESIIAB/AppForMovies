@@ -16,7 +16,7 @@
         public int Id { get; set; }
 
         [StringLength(50, ErrorMessage = "Title name cannot be longer than 50 characters.", MinimumLength = 4)]
-        public string Name { get; set; }
+        public string Name { get; set; }="sci-fi";
 
         //it assigns a value by default
         public IList<Movie> Movies { get; set; } = new List<Movie>();

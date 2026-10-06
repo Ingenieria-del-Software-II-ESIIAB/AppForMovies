@@ -31,7 +31,10 @@
                 var user = dbContext.Users.OfType<ApplicationUser>().FirstOrDefault(u => u.UserName == "elena@uclm.es");
 
                 //it initializes the database with a Rental
-                SeedRental(dbContext, user);
+                if (user==null) 
+                    logger.LogError("An error occurred seeding a Rental in the Database: user does not exist");
+                else
+                    SeedRental(dbContext, user);
             }
             catch (Exception ex) {
                 logger.LogError(ex, "An error occurred seeding a Rental in the Database.");

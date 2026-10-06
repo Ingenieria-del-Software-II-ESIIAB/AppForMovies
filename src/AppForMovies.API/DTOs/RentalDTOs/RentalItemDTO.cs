@@ -3,7 +3,7 @@ namespace AppForMovies.API.DTOs.RentalDTOs
 {
     public class RentalItemDTO
     {
-        public RentalItemDTO(int movieID, string title, string genre, double priceForRenting, string description = "")
+        public RentalItemDTO(int movieID, string title, string genre, double priceForRenting, string? description = "")
         {
             MovieID = movieID;
             Title = title;

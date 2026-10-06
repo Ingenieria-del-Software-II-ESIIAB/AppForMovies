@@ -37,6 +37,7 @@ namespace AppForMovies.API.Controllers
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<MovieForRentalDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetMoviesForRental(string? movieTitle, string? movieGenre, DateTime? fromDate, DateTime? toDate)
         {
             //    var movies = await _context.Movies

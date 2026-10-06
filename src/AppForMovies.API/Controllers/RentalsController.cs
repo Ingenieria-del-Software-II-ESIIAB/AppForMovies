@@ -23,11 +23,6 @@ namespace AppForMovies.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetRental(int id)
         {
-            if (_context.Rentals == null)
-            {
-                _logger.LogError("Error: Rentals table does not exist");
-                return NotFound();
-            }
 
             var rental = await _context.Rentals
              .Where(r => r.Id == id)
