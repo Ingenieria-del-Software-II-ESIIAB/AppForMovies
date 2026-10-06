@@ -16,6 +16,7 @@ Rental "Rental"  o---  "0..* RentalItems"  RentalItem
 
 Genre "Genre"  o---  "0..* Movies"  Movie
 
+ApplicationUser "ApplicationUser"  o---  "0..* Rentals"  Rental
 
 
 hide Purchase
