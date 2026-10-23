@@ -1,4 +1,4 @@
-﻿namespace AppForMovies.API.DTOs.MovieDTOs;
+namespace AppForMovies.API.DTOs.MovieDTOs;
 public class MovieForPurchaseDTO {
     public MovieForPurchaseDTO(int id, string title, string genre, DateTime releaseDate, decimal priceForPurchase) {
         Id = id;
