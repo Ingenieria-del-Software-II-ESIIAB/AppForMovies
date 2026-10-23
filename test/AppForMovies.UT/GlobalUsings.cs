@@ -10,7 +10,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using AppForMovies.API.Data;
 global using AppForMovies.API.Models;
-global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.Extensions.Logging;
 global using Moq;
 

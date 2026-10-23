@@ -55,7 +55,7 @@ namespace AppForMovies.UT.MoviesController_test
         }
 
 
-        public static IEnumerable<object[]> TestCasesFor_GetMoviesForRental_OK()
+        public static IEnumerable<object?[]> TestCasesFor_GetMoviesForRental_OK()
         {
 
             var movieDTOs = new List<MovieForRentalDTO>() {
@@ -76,13 +76,13 @@ namespace AppForMovies.UT.MoviesController_test
                 //the GetMoviesForPurchase method returns the movies ordered by title
                 .OrderBy(m => m.Title).ToList();
 
-            var allTests = new List<object[]>
+            var allTests = new List<object?[]>
             {             //filters to apply - expected movies
                                           //by default datefrom=today +1, dateto=today+2, thus movieDTOs[0] cannot be returned
-                new object[] { null, null, null, null, movieDTOsTC1,  },
-                new object[] { "mechanic", null, null, null, movieDTOsTC2, },
-                new object[] { null, "Drama", null, null, movieDTOsTC3, },
-                new object[] { null, null, DateTime.Today.AddDays(6), DateTime.Today.AddDays(8), movieDTOsTC4, },
+                new object?[] { null, null, null, null, movieDTOsTC1,  },
+                new object?[] { "mechanic", null, null, null, movieDTOsTC2, },
+                new object?[] { null, "Drama", null, null, movieDTOsTC3, },
+                new object?[] { null, null, DateTime.Today.AddDays(6), DateTime.Today.AddDays(8), movieDTOsTC4, },
             };
 
             return allTests;
@@ -96,7 +96,9 @@ namespace AppForMovies.UT.MoviesController_test
             IList<MovieForRentalDTO> expectedMovies)
         {
             // Arrange
-            var controller = new MoviesController(_context, null);
+            var mock = new Mock<ILogger<MoviesController>>();
+            ILogger<MoviesController> logger = mock.Object;
+            var controller = new MoviesController(_context, logger);
 
             // Act
             var result = await controller.GetMoviesForRental(filterTitle, filterGenre, fromDate, toDate);
