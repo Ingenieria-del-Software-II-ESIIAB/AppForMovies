@@ -6,28 +6,15 @@
         {
         }
 
-        public RentalItem(Movie movie, Rental rent)
+        public RentalItem(Movie movie, Rental rent, string? description = null)
         {
             Movie = movie;
             MovieId = movie.Id;
             Rent = rent;
             RentalId = rent.Id;
-        }
-
-        public RentalItem(Movie movie, Rental rent, string? description) : this(movie, rent)
-        {
-            Description = description;
             PriceForRenting = movie.PriceForRenting;
+            Description = description;
         }
-
-        public RentalItem(int movieId, Rental rental, double priceForRenting)
-        {
-            MovieId = movieId;
-            Rent = rental;
-            PriceForRenting = priceForRenting;
-        }
-
-        public RentalItem(int movieId, Rental rental, double priceForRenting, string? description) : this(movieId, rental, priceForRenting) => Description = description;
 
         public Movie Movie { get; set; }=new Movie();
 

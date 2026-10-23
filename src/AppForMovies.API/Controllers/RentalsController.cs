@@ -90,19 +90,17 @@
                 new List<RentalItem>());
 
 
-            rental.TotalPrice = 0;
-            var numDays = (rental.RentalDateTo - rental.RentalDateFrom).TotalDays;
+            int numDays = (int)(rental.RentalDateTo - rental.RentalDateFrom).TotalDays;
 
 
             foreach (var item in rentalForCreate.RentalItems) {
-                var movie = movies.FirstOrDefault(m => m.Title == item.Title);
+                Movie? movie = movies.FirstOrDefault(m => m.Title == item.Title);
                 //if item.Title is not in the database or if it is not available for renting in the dates provided by the user
                 if (movie == null)  {
                     ModelState.AddModelError("RentalItems", $"Error! Movie titled '{item.Title}' is not available for being rented from {rentalForCreate.RentalDateFrom.ToShortDateString()} to {rentalForCreate.RentalDateTo.ToShortDateString()}");
                 }
                 else {
-                    // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    rental.RentalItems.Add(new RentalItem(movie.Id, rental, movie.PriceForRenting, item.Description));
+                    rental.RentalItems.Add(new RentalItem(movie, rental,  item.Description));
                     item.PriceForRenting = movie.PriceForRenting;
                 }
             }
