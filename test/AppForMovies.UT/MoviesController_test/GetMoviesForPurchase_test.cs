@@ -48,5 +48,56 @@ public class GetMoviesForPurchase_test : AppForMovies4SqliteUT {
 
     }
 
+    public static IEnumerable<object[]> TestCasesFor_GetMoviesForPurchase_OK() {
 
+        var movieDTOs = new List<MovieForPurchaseDTO>() {
+            new MovieForPurchaseDTO(1,"The lord of the rings","Sci - Fi",new DateTime(2011, 10, 20),10.0m),
+            new MovieForPurchaseDTO(2,"The mechanic orange","Drama" , new DateTime(1988, 02, 23),15.0m),
+
+        };
+
+        var movieDTOsTC1 = new List<MovieForPurchaseDTO>() { movieDTOs[0], movieDTOs[1] };
+                //the GetMoviesForPurchase method returns the movies ordered by title
+
+
+
+        var movieDTOsTC2 = new List<MovieForPurchaseDTO>() { movieDTOs[0] };
+        var movieDTOsTC3 = new List<MovieForPurchaseDTO>() { movieDTOs[1] };
+
+
+
+        var allTests = new List<object?[]>
+        {             //filters to apply - expected movies
+            new object?[] { null, null, movieDTOsTC1,  },
+            new object?[] { "lord", null, movieDTOsTC2, },
+            new object?[] { null, "Drama", movieDTOsTC3, },
+
+        };
+
+        return allTests;
+    }
+
+    [Theory]
+    [Trait("LevelTesting", "Unit Testing")]
+    [MemberData(nameof(TestCasesFor_GetMoviesForPurchase_OK))]
+    public async Task GetMoviesForPurchase_filter_test(string? movieTitle, string? movieGenre, List<MovieForPurchaseDTO> expectedMovies) {
+        // Arrange
+        var mock = new Mock<ILogger<MoviesController>>();
+        ILogger<MoviesController> logger = mock.Object;
+        var controller = new MoviesController(_context, logger);
+
+        // Act
+        var result = await controller.GetMoviesForPurchase(movieTitle, movieGenre);
+
+        //Assert
+        //we check that the response type is OK 
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        //and obtain the list of movies
+        var movieDTOsActual = Assert.IsType<List<MovieForPurchaseDTO>>(okResult.Value);
+        Assert.Equal(expectedMovies, movieDTOsActual);
+
+    }
 }
+
+
+
