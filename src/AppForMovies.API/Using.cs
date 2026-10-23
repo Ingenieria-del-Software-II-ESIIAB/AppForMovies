@@ -17,5 +17,7 @@ global using System.Text.Json.Serialization;
 global using Microsoft.OpenApi.Models;
 global using Swashbuckle.AspNetCore.SwaggerGen;
 global using System.Reflection;
+global using AppForMovies.API.DTOs.MovieDTOs;
+global using AppForMovies.API.DTOs.RentalDTOs;
 
 

@@ -1,8 +1,4 @@
-﻿using AppForMovies.API.DTOs.RentalDTOs;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace AppForMovies.API.Controllers
+﻿namespace AppForMovies.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -31,12 +27,12 @@ namespace AppForMovies.API.Controllers
                         .ThenInclude(movie => movie.Genre) //then join table Genre
              .Select(r => new RentalDetailDTO(r.Id, r.RentalDate, r.CustomerUserName,
                     r.CustomerNameSurname, r.DeliveryAddress,
-                    (PaymentMethodTypes)r.PaymentMethod,
+                    r.PaymentMethod,
                     r.RentalDateFrom, r.RentalDateTo,
                     r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.Movie.Id,
                                 ri.Movie.Title, ri.Movie.Genre.Name,
-                                ri.Movie.PriceForRenting, ri.Description)).ToList<RentalItemDTO>()))
+                                ri.Movie.PriceForRenting, ri.Description)).ToList()))
              .FirstOrDefaultAsync();
 
 
@@ -79,40 +75,32 @@ namespace AppForMovies.API.Controllers
 
             var movies = _context.Movies.Include(m => m.RentalItems)
                 .ThenInclude(ri => ri.Rent)
-                .Where(m => movieTitles.Contains(m.Title))
+                .Where(m => movieTitles.Contains(m.Title) &&
 
-                //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
-                .Select(m => new {
-                    m.Id,
-                    m.Title,
-                    m.QuantityForRenting,
-                    m.PriceForRenting,
-                    //we count the number of rentalItems that are within the rental period
-                    NumberOfRentedItems = m.RentalItems.Count(ri => ri.Rent.RentalDateFrom <= rentalForCreate.RentalDateTo
-                            && ri.Rent.RentalDateTo >= rentalForCreate.RentalDateFrom)
-                })
+                    //we must check that there is enough quantity to be rented in the database
+                    m.RentalItems.Count(ri => ri.Rent.RentalDateFrom <= rentalForCreate.RentalDateTo
+                                        && ri.Rent.RentalDateTo >= rentalForCreate.RentalDateFrom) < m.QuantityForRenting)
                 .ToList();
 
 
             Rental rental = new Rental(rentalForCreate.CustomerUserName, rentalForCreate.CustomerNameSurname,
-                user, rentalForCreate.DeliveryAddress, DateTime.Now,
-                (AppForMovies.API.Models.PaymentMethodTypes)rentalForCreate.PaymentMethod,
-rentalForCreate.RentalDateFrom, rentalForCreate.RentalDateTo, new List<RentalItem>());
+                user!, rentalForCreate.DeliveryAddress, DateTime.Now,
+                rentalForCreate.PaymentMethod,
+                rentalForCreate.RentalDateFrom, rentalForCreate.RentalDateTo, 
+                new List<RentalItem>());
 
 
-            rental.TotalPrice = 0;
-            var numDays = (rental.RentalDateTo - rental.RentalDateFrom).TotalDays;
+            int numDays = (int)(rental.RentalDateTo - rental.RentalDateFrom).TotalDays;
 
 
             foreach (var item in rentalForCreate.RentalItems) {
-                var movie = movies.FirstOrDefault(m => m.Title == item.Title);
-                //we must check that there is enough quantity to be rented in the database
-                if ((movie == null) || (movie.NumberOfRentedItems >= movie.QuantityForRenting)) {
+                Movie? movie = movies.FirstOrDefault(m => m.Title == item.Title);
+                //if item.Title is not in the database or if it is not available for renting in the dates provided by the user
+                if (movie == null)  {
                     ModelState.AddModelError("RentalItems", $"Error! Movie titled '{item.Title}' is not available for being rented from {rentalForCreate.RentalDateFrom.ToShortDateString()} to {rentalForCreate.RentalDateTo.ToShortDateString()}");
                 }
                 else {
-                    // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    rental.RentalItems.Add(new RentalItem(movie.Id, rental, movie.PriceForRenting, item.Description));
+                    rental.RentalItems.Add(new RentalItem(movie, rental,  item.Description));
                     item.PriceForRenting = movie.PriceForRenting;
                 }
             }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AppForMovies.UT.RentalsController_test {
-    public class PostRentals_test:AppForMovies4SqliteUT {
+    public class CreateRentals_test:AppForMovies4SqliteUT {
         private const string _userName = "elena.navarro@uclm.es";
         private const string _customerNameSurname = "Elena Navarro";
         private const string _deliveryAddress = "Avda. España s/n, Albacete 02071";
@@ -17,7 +17,7 @@ namespace AppForMovies.UT.RentalsController_test {
         private const string _movie2Title = "The man in the high castle";
         private const string _movie2Genre = "Drama";
 
-        public PostRentals_test() {
+        public CreateRentals_test() {
 
             var genres = new List<Genre>() {
                 new Genre(_movie1Genre),

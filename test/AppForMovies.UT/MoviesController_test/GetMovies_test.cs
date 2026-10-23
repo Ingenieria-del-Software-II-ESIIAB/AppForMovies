@@ -1,5 +1,5 @@
 ﻿using AppForMovies.API.Controllers;
-using AppForMovies.Shared.MovieDTOs;
+using AppForMovies.API.DTOs.MovieDTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace AppForMovies.UT.MoviesController_test
 {
-    public class GetMovies_test: AppForMovies4SqliteUT
+    public class GetMoviesForRental_test: AppForMovies4SqliteUT
     {
-        public GetMovies_test()
+        public GetMoviesForRental_test()
         {
 
             var genres = new List<Genre>() {

@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace AppForMovies.API.Controllers {
+﻿namespace AppForMovies.API.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class GenresController : ControllerBase {
         private readonly ApplicationDbContext _context;
-        private ILogger _logger;
+        private ILogger<GenresController> _logger;
 
-        public GenresController(ApplicationDbContext context, ILogger<MoviesController> logger) {
+        public GenresController(ApplicationDbContext context, ILogger<GenresController> logger) {
             _context = context;
             _logger = logger;
         }

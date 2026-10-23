@@ -48,7 +48,7 @@ public class GetMoviesForPurchase_test : AppForMovies4SqliteUT {
 
     }
 
-    public static IEnumerable<object[]> TestCasesFor_GetMoviesForPurchase_OK() {
+    public static IEnumerable<object?[]> TestCasesFor_GetMoviesForPurchase_OK() {
 
         var movieDTOs = new List<MovieForPurchaseDTO>() {
             new MovieForPurchaseDTO(1,"The lord of the rings","Sci - Fi",new DateTime(2011, 10, 20),10.0m),
