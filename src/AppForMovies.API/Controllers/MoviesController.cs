@@ -1,9 +1,4 @@
-﻿using AppForMovies.Shared.MovieDTOs;
-using AppForMovies.API.DTOs.MovieDTOs;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace AppForMovies.API.Controllers
+﻿namespace AppForMovies.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -41,22 +36,7 @@ namespace AppForMovies.API.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetMoviesForRental(string? movieTitle, string? movieGenre, DateTime? fromDate, DateTime? toDate)
         {
-            //    var movies = await _context.Movies
-            //        .Include(m=>m.Genre)
-            //        .Include(m=>m.RentalItems)
-            //            .ThenInclude(ri=>ri.Rent)
-            //        .Where(m=>((m.Title.Contains(title)) || (title==null))
-            //            && ((m.Genre.Name.Equals(genre)) || (genre==null)) 
-            //            && (m.RentalItems.Count(ri=>ri.Rent.RentalDateFrom<=to
-            //                && ri.Rent.RentalDateTo>=from) < m.QuantityForRenting))
-            //        .OrderBy(m=>m.Title)
-            //            .ThenBy(m=>m.PriceForRenting)
-            //        .Select(m=>new MovieForRentalDTO(m.Id, m.Title, m.Genre.Name,
-            //                    m.ReleaseDate, m.PriceForPurchase,
-            //                    m.RentalItems.Max(ri=>ri.Rent.RentalDate)))
-            //        .ToListAsync();
-            //    return Ok(movies);
-            //}
+
             if (fromDate != null && toDate != null && fromDate > toDate)
             {
                 //return BadRequest( Problem("fromDate must be earlier than toDate", 
@@ -84,8 +64,8 @@ namespace AppForMovies.API.Controllers
                    (movieTitle == null || m.Title.Contains(movieTitle)) //in case user has provided a title
                     && (movieGenre == null || m.Genre.Name.Equals(movieGenre))
                     //we check that it has not 
-                    && (m.RentalItems.Where(ri => ri.Rent.RentalDateFrom <= toDate
-                                            && ri.Rent.RentalDateTo >= fromDate).Count() < m.QuantityForRenting)
+                    && (m.RentalItems.Count(ri => ri.Rent.RentalDateFrom <= toDate
+                                            && ri.Rent.RentalDateTo >= fromDate) < m.QuantityForRenting)
 
                     )
 
