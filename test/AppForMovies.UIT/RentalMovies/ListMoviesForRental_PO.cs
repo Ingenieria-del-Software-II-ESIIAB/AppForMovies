@@ -51,9 +51,12 @@ namespace AppForMovies.UIT.RentalMovies {
             //select Action from the dropdown menu
             selectElement.SelectByText(genreSelected);
 
-            InputDateInDatePicker(_fromBy, from);
-            InputDateInDatePicker(_toBy, to);
+            //InputDateInDatePicker(_fromBy, from);
+            //InputDateInDatePicker(_toBy, to);
+            _driver.FindElement(_fromBy).SendKeys(from.ToString("dd/MM/yyyy"));
+            _driver.FindElement(_toBy).SendKeys(to.ToString("dd/MM/yyyy"));
 
+            WaitForBeingClickable(_searchMoviesBy);
             _searchMoviesButton().Click();
             //we wait for 2 seconds (2000 milliseconds) till the table is reloaded as we have to wait for the API service to be called
             System.Threading.Thread.Sleep(2000);
@@ -63,7 +66,7 @@ namespace AppForMovies.UIT.RentalMovies {
         public void SelectMovies(List<string> movieTitles) {
             //we wait for till the movies are available to be selected 
             foreach (var movieTitle in movieTitles) {
-                WaitForBeingVisible(By.Id($"movieToRent_{movieTitle}"));
+                WaitForBeingClickable(By.Id($"movieToRent_{movieTitle}"));
                 _driver.FindElement(By.Id($"movieToRent_{movieTitle}")).Click();
             }
         }
@@ -74,8 +77,9 @@ namespace AppForMovies.UIT.RentalMovies {
         }
 
         public void ModifyRentingCart(string title) {
+            WaitForBeingClickable(_ShowRentingCartBy);
             _showRentingCartButton().Click();
-            WaitForBeingVisible(By.Id($"removeMovie_{title}"));
+            WaitForBeingClickable(By.Id($"removeMovie_{title}"));
             _driver.FindElement(By.Id($"removeMovie_{title}")).Click();
 
         }

@@ -6,12 +6,12 @@ using OpenQA.Selenium.Firefox;
 namespace AppForMovies.UIT.Shared {
     public class UC_UIT:IDisposable {
 
-        private  bool _pipeline = false;
+        private  bool _pipeline = false; //set to true if you are running the tests in a pipeline, false if you are running them in your local machine
 
         //establish which browser you would like to use
-        //private string _browser = "Chrome";
+        private string _browser = "Chrome";
         //private string _browser = "Firefox";
-        private  string _browser = "Edge";
+        //private  string _browser = "Edge";
 
         protected IWebDriver _driver;
         protected readonly ITestOutputHelper _output;
@@ -20,7 +20,7 @@ namespace AppForMovies.UIT.Shared {
         public string _URI {
             get {
                 //set url of your web page 
-                return "https://localhost:7083/";
+                return "http://localhost:5057/";
 
             }
         }
