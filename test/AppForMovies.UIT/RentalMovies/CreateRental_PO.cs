@@ -37,12 +37,15 @@ namespace AppForMovies.UIT.RentalMovies {
 
 
         public void PressRentYourMovies() {
+            WaitForBeingClickable(By.Id("Submit"));
             _driver.FindElement(By.Id("Submit")).Click();
         }
 
 
 
         public void PressModifyMovies() {
+            
+            WaitForBeingClickable(By.Id("ModifyMovies"));
             _driver.FindElement(By.Id("ModifyMovies")).Click();
         }
 

@@ -33,7 +33,11 @@ namespace AppForMovies.UIT.RentalMovies {
 
         private void InitialStepsForRentalMovies_UIT() {
             Precondition_perform_login();
-            listmovies.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            // spinner/loader gone
+            //Wait for the page to finish changing,
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
+            wait.Until(d => d.FindElements(By.CssSelector(".loading, .spinner")).Count == 0);
+            listmovies.WaitForBeingClickable(By.Id("CreateRenting"));
             _driver.FindElement(By.Id("CreateRenting")).Click();
         }
 
