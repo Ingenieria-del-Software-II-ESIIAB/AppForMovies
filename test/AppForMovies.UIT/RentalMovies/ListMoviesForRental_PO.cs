@@ -20,6 +20,8 @@ namespace AppForMovies.UIT.RentalMovies {
         private By _tableOfMoviesBy = By.Id("TableOfMovies");
         private By _modalBy = By.Id("DialogOKSaveDelete");
 
+         private By _messageErrorBy = By.Id("MessageError");
+
         private IWebElement _movieTitle() => _driver.FindElement(_movieTitleBy);
         //this code is a shortcut for:
         // private IWebElement _movieTitle() {return _driver.FindElement(By.Id("movieTitle"));}
@@ -79,8 +81,8 @@ namespace AppForMovies.UIT.RentalMovies {
         public void ModifyRentingCart(string title) {
             WaitForBeingClickable(_ShowRentingCartBy);
             _showRentingCartButton().Click();
-            WaitForBeingClickable(By.Id($"removeMovie_{title}"));
-            _driver.FindElement(By.Id($"removeMovie_{title}")).Click();
+            WaitForBeingClickable(By.Id($"MovieSelected_{title}"));
+            _driver.FindElement(By.Id($"MovieSelected_{title}")).Click();
 
         }
 
@@ -105,8 +107,10 @@ namespace AppForMovies.UIT.RentalMovies {
 
         }
 
-        public bool CheckMessageError(string expectedError) {
-            return CheckModalBodyText(expectedError, _modalBy);
+        public string GetMessageError() {
+            WaitForBeingVisible(_messageErrorBy);
+            string actualMessage=_driver.FindElement(_messageErrorBy).Text;
+            return actualMessage;
         }
 
     }

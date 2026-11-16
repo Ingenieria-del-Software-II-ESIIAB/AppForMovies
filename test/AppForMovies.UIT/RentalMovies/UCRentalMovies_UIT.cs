@@ -109,7 +109,9 @@ namespace AppForMovies.UIT.RentalMovies {
             //Assert
 
             //this message will be shown if assert fails
-            Assert.True(listmovies.CheckMessageError(error), $"Error in the message box for test {from} - {to}");
+            string actualmessage=listmovies.GetMessageError();
+            Assert.Equal(error, actualmessage,ignoreCase:true);
+            // Assert.True(listmovies.CheckMessageError(error), $"Error in the message box for test {from} - {to}");
 
         }
 
@@ -154,10 +156,10 @@ namespace AppForMovies.UIT.RentalMovies {
 
 
         [Theory]
-        [InlineData("", "Calle de la Universidad 1, Albacete, 02006, España", "The CustomerNameSurname field is required")]
-        [InlineData("Elena", "Calle de la Universidad 1, Albacete, 02006, España", "The field CustomerNameSurname must be a string with a minimum length of 10 and a maximum length of 50")]
-        [InlineData("Elena Navarro", "", "The DeliveryAddress field is required")]
-        [InlineData("Elena Navarro", "Calle", "The field DeliveryAddress must be a string with a minimum length of 10 and a maximum length of 50")]
+        [InlineData("", "Calle de la Universidad 1, Albacete, 02006, España", "The CustomerNameSurname field is required.")]
+        [InlineData("Elena", "Calle de la Universidad 1, Albacete, 02006, España", "The field CustomerNameSurname must be a string with a minimum length of 10 and a maximum length of 50.")]
+        [InlineData("Elena Navarro", "", "The DeliveryAddress field is required.")]
+        [InlineData("Elena Navarro", "Calle", "The field DeliveryAddress must be a string with a minimum length of 10 and a maximum length of 50.")]
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_12_13_14_15_AF5_testingErrorsMandatorydata(string nameSurname, string deliveryAddress,
             string expectedMessageError) {
@@ -178,7 +180,7 @@ namespace AppForMovies.UIT.RentalMovies {
 
             //Assert
             //the expected error is shown in the view
-            Assert.True(createrental.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
+            Assert.Equal(expectedMessageError, createrental.ReturnValidationError(),ignoreCase:true,ignoreLineEndingDifferences:true);
         }
 
         [Fact]

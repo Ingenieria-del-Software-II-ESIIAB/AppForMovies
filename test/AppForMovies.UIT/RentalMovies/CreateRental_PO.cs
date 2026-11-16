@@ -8,9 +8,11 @@ namespace AppForMovies.UIT.RentalMovies {
     public class CreateRental_PO:PageObject {
 
         private By _nameSurnameBy = By.Id("NameSurname");
-        private IWebElement _nameSurname() => _driver.FindElement(_nameSurnameBy);
-        private IWebElement _deliveryAddress() => _driver.FindElement(By.Id("DeliveryAddress"));
-        private IWebElement _paymentMethod() => _driver.FindElement(By.Id("PaymentMethod"));
+        private IWebElement FindNameSurname() => _driver.FindElement(_nameSurnameBy);
+        private IWebElement FindDeliveryAddress() => _driver.FindElement(By.Id("DeliveryAddress"));
+        private IWebElement FindPaymentMethod() => _driver.FindElement(By.Id("PaymentMethod"));
+
+        private IWebElement FindValidationError() => _driver.FindElement(By.Id("ValidationError"));
 
 
 
@@ -21,11 +23,11 @@ namespace AppForMovies.UIT.RentalMovies {
 
         public void FillInRentalInfo(string nameSurname, string deliveryAddress, string paymentMethod) {
             WaitForBeingVisible(_nameSurnameBy);
-            _nameSurname().SendKeys(nameSurname);
-            _deliveryAddress().SendKeys(deliveryAddress);
+            FindNameSurname().SendKeys(nameSurname);
+            FindDeliveryAddress().SendKeys(deliveryAddress);
 
             //create select element object 
-            SelectElement selectElement = new SelectElement(_paymentMethod());
+            SelectElement selectElement = new SelectElement(FindPaymentMethod());
 
             //select Action from the dropdown menu
             selectElement.SelectByText(paymentMethod);
@@ -53,8 +55,9 @@ namespace AppForMovies.UIT.RentalMovies {
             return CheckBodyTable(expectedRentalItems, By.Id("TableOfRentalItems"));
         }
 
-        public bool CheckValidationError(string expectedError) {
-            return _driver.PageSource.Contains(expectedError);
+        public string ReturnValidationError() {
+            return FindValidationError().Text;
+
         }
 
     }
