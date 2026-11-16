@@ -79,8 +79,8 @@ namespace AppForMovies.UIT.RentalMovies {
         public void ModifyRentingCart(string title) {
             WaitForBeingClickable(_ShowRentingCartBy);
             _showRentingCartButton().Click();
-            WaitForBeingClickable(By.Id($"removeMovie_{title}"));
-            _driver.FindElement(By.Id($"removeMovie_{title}")).Click();
+            WaitForBeingClickable(By.Id($"MovieSelected_{title}"));
+            _driver.FindElement(By.Id($"MovieSelected_{title}")).Click();
 
         }
 
