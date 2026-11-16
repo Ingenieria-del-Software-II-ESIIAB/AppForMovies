@@ -109,7 +109,9 @@ namespace AppForMovies.UIT.RentalMovies {
             //Assert
 
             //this message will be shown if assert fails
-            Assert.True(listmovies.CheckMessageError(error), $"Error in the message box for test {from} - {to}");
+            string actualmessage=listmovies.GetMessageError();
+            Assert.Equal(error, actualmessage,ignoreCase:true);
+            // Assert.True(listmovies.CheckMessageError(error), $"Error in the message box for test {from} - {to}");
 
         }
 

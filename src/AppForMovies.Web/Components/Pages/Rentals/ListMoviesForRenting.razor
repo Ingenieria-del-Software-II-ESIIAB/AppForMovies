@@ -14,7 +14,14 @@
 
 <h3>Select Movies For Renting</h3>
 <div class="container-fluid">
+
     <div class="row">
+        @if (!string.IsNullOrEmpty(MessageError))
+        {
+            <div class="row alert alert-danger" role="alert" id="MessageError">
+                @MessageError
+            </div>
+        }
         <div class="d-flex justify-content-between">
             <div><b>Movies Selected:</b> @rental.RentalItems.Count</div>
             <div><b>Days for renting:</b> @DaysForRental </div>
@@ -26,16 +33,16 @@
     </div>
 
 
-
-    <div class="row" hidden="@hiddenRentingCart">
-        <div class="d-grid gap-2 d-md-block">
-        @foreach (RentalItemDTO item in rental.RentalItems)
-        {
-            <button type="button" class="btn btn-outline-secondary" id="MovieSelected_@item.Title" @onclick="@(() => RemoveRentalItem(item))">@item.Title (@item.PriceForRenting €)</button>           
-        }
+    @if(!hiddenRentingCart){
+        <div class="row">
+            <div class="d-grid gap-2 d-md-block">
+            @foreach (RentalItemDTO item in rental.RentalItems)
+            {
+                <button type="button" class="btn btn-outline-secondary" id="MovieSelected_@item.Title" @onclick="@(() => RemoveRentalItem(item))">@item.Title (@item.PriceForRenting €)</button>           
+            }
+            </div>
         </div>
-    </div>
-
+    }
       
 
     <div class="row">
@@ -114,29 +121,11 @@
 
 </div>
 
-@*a modal popup dialog to inform user about problems*@
-@if (DialogOKIsOpen)
-{
-    <Dialog Caption="Error!"
-            Message="@DialogOKMessage"
-            OnClose="@OnDialogOKClose"
-            Type=Dialog.Category.Okay>
-    </Dialog>
-}
 
 @code {
 
-    private bool DialogOKIsOpen;
-    private string DialogOKMessage;
-    private void OpenDialogOK(string message)
-    {
-        DialogOKIsOpen = true;
-        DialogOKMessage = message;
-    }
-    private async Task OnDialogOKClose()
-    {
-        DialogOKIsOpen = false;
-    }
+
+    private string MessageError;
 
     private bool hiddenRentingCart = true;
     private void ToggleRentingCart()
@@ -237,16 +226,18 @@
 
         if (rental.RentalDateFrom > rental.RentalDateTo)
         {
-            OpenDialogOK("Your rental must end after than its starts");
+            @* OpenDialogOK("Your rental must end after than its starts"); *@
+            MessageError="Your rental must end after than its starts";
             return;
         }
 
         if (rental.RentalDateFrom < DateTime.Today || rental.RentalDateTo < DateTime.Today)
         {
-            OpenDialogOK("Your rental period must be later");
+            @* OpenDialogOK("Your rental period must be later"); *@
+            MessageError="Your rental period must be later";
             return;
         }
-
+        MessageError="";
         try
         {
             Movies = await apiservice.GetMoviesForRentalAsync(movieTitle, movieGenre, rental.RentalDateFrom, rental.RentalDateTo);
