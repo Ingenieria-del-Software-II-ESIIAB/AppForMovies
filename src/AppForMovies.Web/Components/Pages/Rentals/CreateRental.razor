@@ -16,7 +16,7 @@
 <EditForm Model="rental"  OnValidSubmit="OpenDialog">
 
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary class="row alert alert-danger" id="ValidationError"/>
     @if (!string.IsNullOrEmpty(message))
     {
         <div class="row alert alert-danger" role="alert" id="MessageError">
